@@ -1,3 +1,10 @@
+export_on_save:
+  pandoc: true
+pandoc:
+  pdf-engine: xelatex
+  output: Manuscript.pdf
+
+
 # Numerical Validation of Bragg Diffraction in One-Dimensional Photonic Crystals using Transfer Matrix Method
 
 **Stefan Len**
