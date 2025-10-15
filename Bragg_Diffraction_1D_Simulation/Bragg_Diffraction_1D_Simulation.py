@@ -359,19 +359,20 @@ def generate_summary_report(results, save_path):
             'type': 'Bragg_Diffraction_1D'
         },
         'parameters': {
-            'lattice_constant': LATTICE_CONSTANT,
-            'num_periods': NUM_PERIODS,
-            'wavelength_range': [WAVELENGTH_MIN, WAVELENGTH_MAX]
+            'lattice_constant': float(LATTICE_CONSTANT),
+            'num_periods': int(NUM_PERIODS),
+            'wavelength_range': [float(WAVELENGTH_MIN), float(WAVELENGTH_MAX)]
         },
         'results': {
-            'theoretical_bragg_wavelength': theoretical_bragg,
-            'measured_bragg_wavelength': measured_bragg,
-            'max_reflectivity': max_r_result['reflectivity'],
-            'error_percent': error_percent,
-            'validation_passed': error_percent < 10
+            'theoretical_bragg_wavelength': float(theoretical_bragg),
+            'measured_bragg_wavelength': float(measured_bragg),
+            'max_reflectivity': float(max_r_result['reflectivity']),
+            'error_percent': float(error_percent),
+            'validation_passed': bool(error_percent < 10)
         },
         'all_measurements': results
     }
+
     
     with open(os.path.join(save_path, 'full_summary.json'), 'w') as f:
         json.dump(summary_json, f, indent=2)
