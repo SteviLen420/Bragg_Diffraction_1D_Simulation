@@ -351,7 +351,7 @@ def generate_summary_report(results, save_path):
         
         f.write("\n" + "=" * 70 + "\n")
     
-    # Save JSON summary
+# Save JSON summary - convert all numpy types to Python native
     summary_json = {
         'simulation_info': {
             'code_version': CODE_VERSION,
