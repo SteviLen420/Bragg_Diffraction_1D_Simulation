@@ -499,7 +499,7 @@ All simulation data, including:
 - High-resolution figures (PNG, 300 DPI)
 - Complete simulation summary (TXT format)
 
-are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated GitHub repository.
+are archived with DOI: [Zenodo DOI](https://doi.org/10.5281/zenodo.17358243) and available at the associated GitHub repository.
 
 ---
 
