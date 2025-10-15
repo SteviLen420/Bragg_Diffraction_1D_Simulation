@@ -258,7 +258,7 @@ If you use this code in your research, please cite:
 
 ## License
 
-MIT License — see [LICENSE](./LICENSE) file.
+MIT License — see [LICENSE](../LICENSE) file.
 
 **Copyright © 2025 Stefan Len**
 
@@ -268,7 +268,8 @@ MIT License — see [LICENSE](./LICENSE) file.
 
 **Author:** Stefan Len  
 **Email:** tqe.simulation@gmail.com 
-**GitHub:** [@yourusername](https://github.com/SteviLen420)
+
+**GitHub:** [SteviLen420](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)
 
 For questions, issues, or collaboration inquiries, please open an issue on GitHub or contact via email.
 
