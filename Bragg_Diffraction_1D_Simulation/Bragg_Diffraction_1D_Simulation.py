@@ -351,7 +351,32 @@ def generate_summary_report(results, save_path):
         
         f.write("\n" + "=" * 70 + "\n")
     
-# Save JSON summary - convert all numpy types to Python native
+def _to_py(x):
+    import numpy as np
+    if isinstance(x, np.generic):
+        return x.item()
+    return x
+
+def generate_summary_report(results, save_path):
+    ...
+    max_r_idx = int(np.argmax([_to_py(r['reflectivity']) for r in results]))
+    max_r_result = results[max_r_idx]
+
+    theoretical_bragg = float(2 * LATTICE_CONSTANT)
+    measured_bragg = float(_to_py(max_r_result['wavelength']))
+    error_percent = float(abs(measured_bragg - theoretical_bragg) / theoretical_bragg * 100.0)
+
+    # normalizáltítsd a results elemeit is
+    cleaned_results = []
+    for r in results:
+        cleaned_results.append({
+            'wavelength': float(_to_py(r['wavelength'])),
+            'reflectivity': float(_to_py(r['reflectivity'])),
+            'transmissivity': float(_to_py(r['transmissivity'])),
+            'bragg_prediction': r['bragg_prediction'],
+            'normalized_wavelength': float(_to_py(r['normalized_wavelength'])),
+        })
+
     summary_json = {
         'simulation_info': {
             'code_version': CODE_VERSION,
@@ -364,24 +389,15 @@ def generate_summary_report(results, save_path):
             'wavelength_range': [float(WAVELENGTH_MIN), float(WAVELENGTH_MAX)]
         },
         'results': {
-            'theoretical_bragg_wavelength': float(theoretical_bragg),
-            'measured_bragg_wavelength': float(measured_bragg),
-            'max_reflectivity': float(max_r_result['reflectivity']),
-            'error_percent': float(error_percent),
-            'validation_passed': bool(error_percent < 10)
+            'theoretical_bragg_wavelength': theoretical_bragg,
+            'measured_bragg_wavelength': measured_bragg,
+            'max_reflectivity': float(_to_py(max_r_result['reflectivity'])),
+            'error_percent': error_percent,
+            'validation_passed': bool(error_percent < 10.0)
         },
-        'all_measurements': [
-            {
-                'wavelength': float(r['wavelength']),
-                'reflectivity': float(r['reflectivity']),
-                'transmissivity': float(r['transmissivity']),
-                'bragg_prediction': str(r['bragg_prediction']),
-                'normalized_wavelength': float(r['normalized_wavelength'])
-            }
-            for r in results
-        ]
+        'all_measurements': cleaned_results
     }
-    
+
     with open(os.path.join(save_path, 'full_summary.json'), 'w') as f:
         json.dump(summary_json, f, indent=2)
     
