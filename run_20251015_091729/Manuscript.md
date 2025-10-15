@@ -206,7 +206,7 @@ Figure 1 shows the one-dimensional refractive index profile n(z) of the simulate
 
 ### 4.2 Reflectivity and Transmissivity Spectra
 
-![Reflectivity Spectrum](reflectivity_spectrum.png)
+![Reflectivity Spectrum](/run_20251015_091729/figs/bragg_stack_structure.png)
 
 *Figure 2: (Top) Reflectivity spectrum showing the photonic bandgap centered at λ_B = 451.2 nm. The blue curve represents TMM numerical results; the red dashed line indicates the analytical Bragg wavelength prediction. (Bottom) Corresponding transmissivity spectrum demonstrating complementary behavior (R + T = 1).*
 
