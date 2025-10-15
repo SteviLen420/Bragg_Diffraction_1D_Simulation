@@ -252,7 +252,7 @@ If you use this code in your research, please cite:
 }
 ```
 
-**arXiv preprint:** [arXiv:XXXX.XXXXX [physics.gen-ph]](https://arxiv.org/)
+**arXiv preprint:** 
 
 ---
 
