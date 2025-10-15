@@ -508,7 +508,7 @@ are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated 
 **Figures:** 3  
 **Tables:** 1  
 **Code Availability:** [Bragg_Diffraction_1D_Simulation](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)  
-**Data Availability:** Zenodo DOI [10.5281/zenodo.XXXXXXX]
+**Data Availability:** [Zenodo DOI](https://doi.org/10.5281/zenodo.17358243) 
 
 ---
 
