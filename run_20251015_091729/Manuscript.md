@@ -500,7 +500,7 @@ are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated 
 **Word Count:** ~5,200  
 **Figures:** 3  
 **Tables:** 1  
-**Code Availability:** GitHub https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation  
+**Code Availability:** [Bragg_Diffraction_1D_Simulation](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)  
 **Data Availability:** Zenodo DOI [10.5281/zenodo.XXXXXXX]
 
 ---
