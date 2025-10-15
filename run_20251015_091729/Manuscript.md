@@ -198,7 +198,7 @@ This wavelength lies in the blue region of the visible spectrum.
 
 ### 4.1 Refractive Index Profile
 
-![Bragg Stack Structure](bragg_stack_structure.png)
+![Bragg Stack Structure](/run_20251015_091729/figs/bragg_stack_structure.png)
 
 *Figure 1: Refractive index profile of the 30-period SiO₂/TiO₂ multilayer stack. Blue regions (n = 1.46) represent SiO₂ layers, red regions (n = 2.30) represent TiO₂ layers. The periodic structure extends over 3600 nm with uniform 60 nm layer thicknesses.*
 
@@ -206,7 +206,7 @@ Figure 1 shows the one-dimensional refractive index profile n(z) of the simulate
 
 ### 4.2 Reflectivity and Transmissivity Spectra
 
-![Reflectivity Spectrum](/run_20251015_091729/figs/bragg_stack_structure.png)
+![Reflectivity Spectrum](/run_20251015_091729/figs/reflectivity_spectrum.png)
 
 *Figure 2: (Top) Reflectivity spectrum showing the photonic bandgap centered at λ_B = 451.2 nm. The blue curve represents TMM numerical results; the red dashed line indicates the analytical Bragg wavelength prediction. (Bottom) Corresponding transmissivity spectrum demonstrating complementary behavior (R + T = 1).*
 
@@ -236,7 +236,7 @@ The transmissivity spectrum (Figure 2, bottom) is perfectly complementary to the
 
 ### 4.3 Validation Against Analytical Theory
 
-![Validation Plot](validation_plot.png)
+![Validation Plot](/run_20251015_091729/figs/validation_plot.png)
 
 *Figure 3: Validation of numerical simulation against analytical Bragg law. Reflectivity plotted versus normalized wavelength λ/λ_B. The red dashed line marks the first-order Bragg condition (λ/λ_B = 1), and the pink shaded region indicates ±5% tolerance. TMM results (blue) show excellent agreement with theory.*
 
