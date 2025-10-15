@@ -4,6 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![arXiv](https://img.shields.io/badge/arXiv-physics.gen--ph-b31b1b.svg)](https://arxiv.org/)
 
+**Author:** Stefan Len  
+
 A compact, reproducible simulation of **Bragg diffraction** in one-dimensional dielectric multilayers using the **Transfer Matrix Method (TMM)** at normal incidence.  
 Validates numerics against the analytical Bragg law and performs a strict **energy conservation** audit.
 
