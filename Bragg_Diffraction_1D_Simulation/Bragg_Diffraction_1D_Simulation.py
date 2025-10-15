@@ -303,8 +303,14 @@ def _to_py(x):
         return x.item()
     return x
 
+def _to_py(x):
+    import numpy as np
+    return x.item() if isinstance(x, np.generic) else x
+
 def generate_summary_report(results, save_path):
+    """Generate text and JSON reports using only builtin types."""
     print("\n--- Generating Summary Report ---")
+
     max_r_idx = int(np.argmax([float(_to_py(r['reflectivity'])) for r in results]))
     max_r_result = results[max_r_idx]
 
@@ -312,6 +318,7 @@ def generate_summary_report(results, save_path):
     measured_bragg = float(_to_py(max_r_result['wavelength']))
     error_percent = float(abs(measured_bragg - theoretical_bragg) / theoretical_bragg * 100.0)
 
+    # Text report
     with open(os.path.join(save_path, 'summary_report.txt'), 'w') as f:
         f.write("=" * 70 + "\n")
         f.write("BRAGG DIFFRACTION SIMULATION - SUMMARY REPORT\n")
@@ -322,8 +329,8 @@ def generate_summary_report(results, save_path):
         f.write(f"  Wavelength range: {WAVELENGTH_MIN} - {WAVELENGTH_MAX}\n")
         f.write(f"  Grid size: {GRID_SIZE} points\n\n")
         f.write("ANALYTICAL PREDICTION:\n")
-        f.write(f"  Bragg law: n*λ = 2*d*sin(θ)\n")
-        f.write(f"  Normal incidence: θ = 90°, sin(θ) = 1\n")
+        f.write("  Bragg law: n*λ = 2*d*sin(θ)\n")
+        f.write("  Normal incidence: θ = 90°, sin(θ) = 1\n")
         f.write(f"  First order (n=1): λ_Bragg = 2*d = {theoretical_bragg:.2f}\n\n")
         f.write("NUMERICAL RESULTS:\n")
         f.write(f"  Maximum reflectivity: {float(_to_py(max_r_result['reflectivity'])):.4f}\n")
@@ -339,6 +346,7 @@ def generate_summary_report(results, save_path):
                 else "✗ VALIDATION FAILED: Error > 10%\n")
         f.write("\n" + "=" * 70 + "\n")
 
+    # JSON with builtin types
     cleaned_results = [{
         'wavelength': float(_to_py(r['wavelength'])),
         'reflectivity': float(_to_py(r['reflectivity'])),
@@ -370,9 +378,9 @@ def generate_summary_report(results, save_path):
 
     with open(os.path.join(save_path, 'full_summary.json'), 'w') as f:
         json.dump(summary_json, f, indent=2)
-    
-    print(f"Summary report saved.")
-    print(f"\nRESULTS:")
+
+    print("Summary report saved.")
+    print("\nRESULTS:")
     print(f"  Theoretical Bragg wavelength: {theoretical_bragg:.2f}")
     print(f"  Measured Bragg wavelength: {measured_bragg:.2f}")
     print(f"  Error: {error_percent:.2f}%")
