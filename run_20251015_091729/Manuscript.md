@@ -500,12 +500,12 @@ are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated 
 **Word Count:** ~5,200  
 **Figures:** 3  
 **Tables:** 1  
-**Code Availability:** GitHub [repository URL]  
+**Code Availability:** GitHub https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation  
 **Data Availability:** Zenodo DOI [10.5281/zenodo.XXXXXXX]
 
 ---
 
-*Correspondence:* Stefan Len, tqe.simulation@gmail.com, [GitHub: @SteviLen420]
-
-*Submitted to:* arXiv [physics.gen-ph]  
+*Correspondence:* Stefan Len, tqe.simulation@gmail.com, 
+[GitHub: @SteviLen420](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)
+ 
 *Date:* January 2025
