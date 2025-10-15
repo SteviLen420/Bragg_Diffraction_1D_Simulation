@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-10-15T09:17:29.627874",
+  "code_version": "3.1.0",
+  "simulation_type": "Bragg_Diffraction_TMM",
+  "method": "Transfer_Matrix_Method",
+  "physical_application": "Distributed_Bragg_Reflector_for_VCSEL",
+  "real_world_context": {
+    "application": "Distributed Bragg Reflector (DBR)",
+    "use_cases": [
+      "VCSEL mirrors",
+      "Optical filters",
+      "Photonic crystals"
+    ],
+    "materials": "SiO2/TiO2 multilayer stack"
+  },
+  "parameters": {
+    "lattice_constant_d": 120.0,
+    "num_periods": 30,
+    "wavelength_range_nm": [
+      400.0,
+      900.0
+    ],
+    "num_wavelengths": 50,
+    "refractive_indices": {
+      "n1": 1.46,
+      "n2": 2.3,
+      "material_1": "SiO2 (Silicon Dioxide)",
+      "material_2": "TiO2 (Titanium Dioxide)"
+    }
+  },
+  "physics": {
+    "bragg_law": "n*lambda = 2*n_eff*d",
+    "normal_incidence": "theta = 0 degrees",
+    "first_order_condition": "lambda = 2*n_eff*d for n=1",
+    "effective_index": "n_eff = (n1 + n2) / 2",
+    "quarter_wave_stack": "Each layer thickness = lambda_design / (4*n)",
+    "transmissivity_definition": "T = (n_out/n_in) * |t|^2 (energy flux)"
+  }
+}

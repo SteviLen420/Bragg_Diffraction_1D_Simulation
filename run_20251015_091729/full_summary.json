@@ -1,0 +1,534 @@
+{
+  "simulation_info": {
+    "code_version": "3.1.0",
+    "timestamp": "2025-10-15T09:17:31.021358",
+    "type": "Bragg_Diffraction_TMM",
+    "method": "Transfer_Matrix_Method",
+    "application": "Distributed_Bragg_Reflector_for_VCSEL"
+  },
+  "parameters": {
+    "lattice_constant_nm": 120.0,
+    "num_periods": 30,
+    "refractive_indices": {
+      "n1_SiO2": 1.46,
+      "n2_TiO2": 2.3
+    },
+    "wavelength_range_nm": [
+      400.0,
+      900.0
+    ]
+  },
+  "results": {
+    "theoretical_bragg_wavelength_nm": 451.2,
+    "measured_bragg_wavelength_nm_interpolated": 451.0204081632653,
+    "max_reflectivity_interpolated": 0.9999999999717146,
+    "error_percent": 0.03980315530467357,
+    "validation_passed": true,
+    "energy_conservation": {
+      "max_abs_A": 2.5757174171303632e-14,
+      "passed": true
+    }
+  },
+  "all_measurements": [
+    {
+      "wavelength": 400.0,
+      "reflectivity": 0.9994483957122815,
+      "transmissivity": 0.0005516042877198909,
+      "R_plus_T": 1.0000000000000013,
+      "A": -1.3322676295501878e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 0.8865248226950355
+    },
+    {
+      "wavelength": 410.2040816326531,
+      "reflectivity": 0.9999998786594438,
+      "transmissivity": 1.2134055562646234e-07,
+      "R_plus_T": 0.9999999999999994,
+      "A": 5.551115123125783e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 0.909140251845419
+    },
+    {
+      "wavelength": 420.40816326530614,
+      "reflectivity": 0.9999999980120104,
+      "transmissivity": 1.9879900550943364e-09,
+      "R_plus_T": 1.0000000000000004,
+      "A": -4.440892098500626e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 0.9317556809958026
+    },
+    {
+      "wavelength": 430.61224489795916,
+      "reflectivity": 0.999999999821114,
+      "transmissivity": 1.788859306144966e-10,
+      "R_plus_T": 0.9999999999999999,
+      "A": 1.1102230246251565e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 0.9543711101461861
+    },
+    {
+      "wavelength": 440.81632653061223,
+      "reflectivity": 0.9999999999525686,
+      "transmissivity": 4.743195420021615e-11,
+      "R_plus_T": 1.0000000000000007,
+      "A": -6.661338147750939e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 0.9769865392965696
+    },
+    {
+      "wavelength": 451.0204081632653,
+      "reflectivity": 0.9999999999717146,
+      "transmissivity": 2.8284493820872185e-11,
+      "R_plus_T": 0.9999999999999991,
+      "A": 8.881784197001252e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 0.9996019684469533
+    },
+    {
+      "wavelength": 461.2244897959184,
+      "reflectivity": 0.9999999999669309,
+      "transmissivity": 3.3069069490966623e-11,
+      "R_plus_T": 1.0,
+      "A": 0.0,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 1.0222173975973368
+    },
+    {
+      "wavelength": 471.42857142857144,
+      "reflectivity": 0.9999999999290452,
+      "transmissivity": 7.095387912849106e-11,
+      "R_plus_T": 0.9999999999999991,
+      "A": 8.881784197001252e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 1.0448328267477205
+    },
+    {
+      "wavelength": 481.63265306122446,
+      "reflectivity": 0.9999999997243041,
+      "transmissivity": 2.756947955562618e-10,
+      "R_plus_T": 0.9999999999999989,
+      "A": 1.1102230246251565e-15,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 1.067448255898104
+    },
+    {
+      "wavelength": 491.83673469387753,
+      "reflectivity": 0.9999999979710976,
+      "transmissivity": 2.028902103308269e-09,
+      "R_plus_T": 0.9999999999999998,
+      "A": 2.220446049250313e-16,
+      "energy_ok": true,
+      "bragg_prediction": "Yes",
+      "normalized_wavelength": 1.0900636850484875
+    },
+    {
+      "wavelength": 502.0408163265306,
+      "reflectivity": 0.9999999673764257,
+      "transmissivity": 3.262357426988396e-08,
+      "R_plus_T": 1.0,
+      "A": 0.0,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.112679114198871
+    },
+    {
+      "wavelength": 512.2448979591836,
+      "reflectivity": 0.999998286701022,
+      "transmissivity": 1.7132989787474196e-06,
+      "R_plus_T": 1.0000000000000007,
+      "A": -6.661338147750939e-16,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.1352945433492545
+    },
+    {
+      "wavelength": 522.4489795918367,
+      "reflectivity": 0.9977304964282663,
+      "transmissivity": 0.0022695035717343933,
+      "R_plus_T": 1.0000000000000007,
+      "A": -6.661338147750939e-16,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.1579099724996382
+    },
+    {
+      "wavelength": 532.6530612244898,
+      "reflectivity": 0.20073227130065985,
+      "transmissivity": 0.7992677286993461,
+      "R_plus_T": 1.000000000000006,
+      "A": -5.995204332975845e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.1805254016500217
+    },
+    {
+      "wavelength": 542.8571428571429,
+      "reflectivity": 0.01841400026815634,
+      "transmissivity": 0.9815859997318614,
+      "R_plus_T": 1.0000000000000178,
+      "A": -1.7763568394002505e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.2031408308004055
+    },
+    {
+      "wavelength": 553.0612244897959,
+      "reflectivity": 0.6395126329124406,
+      "transmissivity": 0.36048736708756746,
+      "R_plus_T": 1.000000000000008,
+      "A": -7.993605777301127e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.2257562599507887
+    },
+    {
+      "wavelength": 563.2653061224489,
+      "reflectivity": 0.6410667138160219,
+      "transmissivity": 0.358933286183988,
+      "R_plus_T": 1.0000000000000098,
+      "A": -9.769962616701378e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.2483716891011722
+    },
+    {
+      "wavelength": 573.469387755102,
+      "reflectivity": 0.0885074752322217,
+      "transmissivity": 0.9114925247677843,
+      "R_plus_T": 1.000000000000006,
+      "A": -5.995204332975845e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.270987118251556
+    },
+    {
+      "wavelength": 583.6734693877551,
+      "reflectivity": 0.6128448943113973,
+      "transmissivity": 0.387155105688608,
+      "R_plus_T": 1.0000000000000053,
+      "A": -5.329070518200751e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.2936025474019395
+    },
+    {
+      "wavelength": 593.8775510204082,
+      "reflectivity": 0.03092322815910262,
+      "transmissivity": 0.9690767718408972,
+      "R_plus_T": 0.9999999999999999,
+      "A": 1.1102230246251565e-16,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.3162179765523232
+    },
+    {
+      "wavelength": 604.0816326530612,
+      "reflectivity": 0.5492468249084159,
+      "transmissivity": 0.4507531750915858,
+      "R_plus_T": 1.0000000000000018,
+      "A": -1.7763568394002505e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.3388334057027067
+    },
+    {
+      "wavelength": 614.2857142857142,
+      "reflectivity": 0.1787309798879925,
+      "transmissivity": 0.821269020112021,
+      "R_plus_T": 1.0000000000000135,
+      "A": -1.354472090042691e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.36144883485309
+    },
+    {
+      "wavelength": 624.4897959183673,
+      "reflectivity": 0.3993240031285944,
+      "transmissivity": 0.6006759968714139,
+      "R_plus_T": 1.0000000000000084,
+      "A": -8.43769498715119e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.3840642640034737
+    },
+    {
+      "wavelength": 634.6938775510204,
+      "reflectivity": 0.4278031287408302,
+      "transmissivity": 0.5721968712591731,
+      "R_plus_T": 1.0000000000000033,
+      "A": -3.3306690738754696e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.4066796931538572
+    },
+    {
+      "wavelength": 644.8979591836735,
+      "reflectivity": 0.03975395633124893,
+      "transmissivity": 0.9602460436687621,
+      "R_plus_T": 1.000000000000011,
+      "A": -1.1102230246251565e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.429295122304241
+    },
+    {
+      "wavelength": 655.1020408163265,
+      "reflectivity": 0.47734422647953023,
+      "transmissivity": 0.5226557735204799,
+      "R_plus_T": 1.0000000000000102,
+      "A": -1.021405182655144e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.4519105514546244
+    },
+    {
+      "wavelength": 665.3061224489795,
+      "reflectivity": 0.2587075903399363,
+      "transmissivity": 0.7412924096600663,
+      "R_plus_T": 1.0000000000000027,
+      "A": -2.6645352591003757e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.474525980605008
+    },
+    {
+      "wavelength": 675.5102040816327,
+      "reflectivity": 0.12115572890825575,
+      "transmissivity": 0.8788442710917554,
+      "R_plus_T": 1.000000000000011,
+      "A": -1.1102230246251565e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.4971414097553915
+    },
+    {
+      "wavelength": 685.7142857142858,
+      "reflectivity": 0.4560961388130302,
+      "transmissivity": 0.5439038611869759,
+      "R_plus_T": 1.000000000000006,
+      "A": -5.995204332975845e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.5197568389057752
+    },
+    {
+      "wavelength": 695.9183673469388,
+      "reflectivity": 0.2571596807623102,
+      "transmissivity": 0.7428403192377001,
+      "R_plus_T": 1.0000000000000102,
+      "A": -1.021405182655144e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.5423722680561587
+    },
+    {
+      "wavelength": 706.1224489795918,
+      "reflectivity": 0.05102248230457983,
+      "transmissivity": 0.9489775176954376,
+      "R_plus_T": 1.0000000000000173,
+      "A": -1.7319479184152442e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.5649876972065422
+    },
+    {
+      "wavelength": 716.3265306122448,
+      "reflectivity": 0.4045524232623996,
+      "transmissivity": 0.5954475767376067,
+      "R_plus_T": 1.0000000000000062,
+      "A": -6.217248937900877e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.5876031263569257
+    },
+    {
+      "wavelength": 726.530612244898,
+      "reflectivity": 0.3643723710347578,
+      "transmissivity": 0.6356276289652462,
+      "R_plus_T": 1.000000000000004,
+      "A": -3.9968028886505635e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.6102185555073094
+    },
+    {
+      "wavelength": 736.7346938775511,
+      "reflectivity": 0.0205470274402142,
+      "transmissivity": 0.9794529725598116,
+      "R_plus_T": 1.0000000000000258,
+      "A": -2.5757174171303632e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.6328339846576931
+    },
+    {
+      "wavelength": 746.9387755102041,
+      "reflectivity": 0.22624538617592063,
+      "transmissivity": 0.773754613824094,
+      "R_plus_T": 1.0000000000000147,
+      "A": -1.4654943925052066e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.6554494138080764
+    },
+    {
+      "wavelength": 757.1428571428571,
+      "reflectivity": 0.4189752769244222,
+      "transmissivity": 0.5810247230755855,
+      "R_plus_T": 1.0000000000000078,
+      "A": -7.771561172376096e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.67806484295846
+    },
+    {
+      "wavelength": 767.3469387755101,
+      "reflectivity": 0.2818553577242947,
+      "transmissivity": 0.7181446422757141,
+      "R_plus_T": 1.0000000000000089,
+      "A": -8.881784197001252e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.7006802721088434
+    },
+    {
+      "wavelength": 777.5510204081633,
+      "reflectivity": 0.0024571868556583793,
+      "transmissivity": 0.9975428131443472,
+      "R_plus_T": 1.0000000000000056,
+      "A": -5.551115123125783e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.7232957012592272
+    },
+    {
+      "wavelength": 787.7551020408164,
+      "reflectivity": 0.2213908935402147,
+      "transmissivity": 0.7786091064597924,
+      "R_plus_T": 1.000000000000007,
+      "A": -7.105427357601002e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.7459111304096109
+    },
+    {
+      "wavelength": 797.9591836734694,
+      "reflectivity": 0.4008246087773232,
+      "transmissivity": 0.599175391222685,
+      "R_plus_T": 1.0000000000000082,
+      "A": -8.215650382226158e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.7685265595599944
+    },
+    {
+      "wavelength": 808.1632653061224,
+      "reflectivity": 0.3218009694275528,
+      "transmissivity": 0.678199030572451,
+      "R_plus_T": 1.0000000000000038,
+      "A": -3.774758283725532e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.7911419887103777
+    },
+    {
+      "wavelength": 818.3673469387754,
+      "reflectivity": 0.0549264131635413,
+      "transmissivity": 0.9450735868364694,
+      "R_plus_T": 1.0000000000000107,
+      "A": -1.0658141036401503e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.8137574178607612
+    },
+    {
+      "wavelength": 828.5714285714286,
+      "reflectivity": 0.08225630503192898,
+      "transmissivity": 0.9177436949680844,
+      "R_plus_T": 1.0000000000000133,
+      "A": -1.3322676295501878e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.836372847011145
+    },
+    {
+      "wavelength": 838.7755102040817,
+      "reflectivity": 0.32602136087067346,
+      "transmissivity": 0.673978639129338,
+      "R_plus_T": 1.0000000000000115,
+      "A": -1.1546319456101628e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.8589882761615286
+    },
+    {
+      "wavelength": 848.9795918367347,
+      "reflectivity": 0.3893475109270992,
+      "transmissivity": 0.6106524890729121,
+      "R_plus_T": 1.0000000000000113,
+      "A": -1.1324274851176597e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.8816037053119121
+    },
+    {
+      "wavelength": 859.1836734693877,
+      "reflectivity": 0.2591381860047182,
+      "transmissivity": 0.7408618139952874,
+      "R_plus_T": 1.0000000000000056,
+      "A": -5.551115123125783e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.9042191344622954
+    },
+    {
+      "wavelength": 869.3877551020407,
+      "reflectivity": 0.029374683748008983,
+      "transmissivity": 0.9706253162520008,
+      "R_plus_T": 1.0000000000000098,
+      "A": -9.769962616701378e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.926834563612679
+    },
+    {
+      "wavelength": 879.5918367346939,
+      "reflectivity": 0.0785366851756593,
+      "transmissivity": 0.9214633148243628,
+      "R_plus_T": 1.0000000000000222,
+      "A": -2.220446049250313e-14,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.9494499927630626
+    },
+    {
+      "wavelength": 889.795918367347,
+      "reflectivity": 0.29515438521326226,
+      "transmissivity": 0.7048456147867442,
+      "R_plus_T": 1.0000000000000064,
+      "A": -6.439293542825908e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.9720654219134464
+    },
+    {
+      "wavelength": 900.0,
+      "reflectivity": 0.3820983438664614,
+      "transmissivity": 0.6179016561335425,
+      "R_plus_T": 1.000000000000004,
+      "A": -3.9968028886505635e-15,
+      "energy_ok": true,
+      "bragg_prediction": "No",
+      "normalized_wavelength": 1.9946808510638299
+    }
+  ]
+}

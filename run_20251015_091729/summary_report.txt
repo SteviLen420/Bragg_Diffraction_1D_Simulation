@@ -1,0 +1,49 @@
+======================================================================
+BRAGG DIFFRACTION SIMULATION (TMM) - SUMMARY REPORT
+======================================================================
+
+PHYSICAL APPLICATION:
+  Type: Distributed Bragg Reflector for VCSEL
+  Use case: High-reflectivity mirror for VCSELs
+  Materials: SiO2 (n=1.46) / TiO2 (n=2.3)
+  Technology: Thin-film multilayer coatings
+
+SIMULATION PARAMETERS:
+  Method: Transfer Matrix Method (TMM)
+  Transmission (T): Energy flux definition (n_out/n_in)|t|^2
+  Lattice constant (d): 120.0 nm
+  Number of periods: 30
+  Total stack thickness: 3600.0 nm
+  Wavelength range: 400.0 - 900.0 nm
+  Spectral resolution: 10.2 nm
+
+ANALYTICAL PREDICTION:
+  Bragg law: n*λ = 2*n_eff*d
+  Effective index: n_eff = (n1+n2)/2 = 1.880
+  First order (n=1): λ_Bragg = 451.20 nm
+
+NUMERICAL RESULTS (TMM):
+  Maximum reflectivity: 1.0000 (100.00%)
+  Peak wavelength (interpolated): 451.02 nm
+  Normalized (λ/λ_Bragg): 0.999602
+  Stop band width (FWHM): ~45.1 nm
+
+VALIDATION:
+  Theoretical λ_Bragg: 451.20 nm
+  Measured λ_Bragg: 451.02 nm
+  Absolute error: 0.18 nm
+  Relative error: 0.040%
+  Status: ✓✓✓ EXCELLENT AGREEMENT (Error < 0.5%)
+
+ENERGY CONSERVATION:
+  Check: A = 1 - (R + T) should be zero for lossless media.
+  Max deviation |A|: 2.58e-14
+  Status: PASSED ✓
+
+PRACTICAL SIGNIFICANCE:
+  This DBR achieves 100.0% reflectivity at 451 nm,
+  suitable for VCSEL applications in the visible/NIR range.
+  The 30-period stack provides sufficient optical isolation
+  while maintaining reasonable fabrication complexity.
+
+======================================================================
