@@ -370,9 +370,17 @@ def generate_summary_report(results, save_path):
             'error_percent': float(error_percent),
             'validation_passed': bool(error_percent < 10)
         },
-        'all_measurements': results
+        'all_measurements': [
+            {
+                'wavelength': float(r['wavelength']),
+                'reflectivity': float(r['reflectivity']),
+                'transmissivity': float(r['transmissivity']),
+                'bragg_prediction': str(r['bragg_prediction']),
+                'normalized_wavelength': float(r['normalized_wavelength'])
+            }
+            for r in results
+        ]
     }
-
     
     with open(os.path.join(save_path, 'full_summary.json'), 'w') as f:
         json.dump(summary_json, f, indent=2)
