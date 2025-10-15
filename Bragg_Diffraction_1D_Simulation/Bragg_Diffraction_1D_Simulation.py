@@ -5,7 +5,7 @@
 # Bragg_Diffraction_1D_Simulation.py
 # ===================================================================================
 # Author: Stefan Len
-# Version: 3.1.0
+# Version: 1.0
 # 
 # Overview:
 #   Transfer Matrix Method (TMM) simulation of 1D Bragg diffraction in SiO₂/TiO₂

@@ -1,5 +1,6 @@
 # Bragg Diffraction in 1D Multilayers (TMM)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17358243.svg)](https://doi.org/10.5281/zenodo.17358243)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![arXiv](https://img.shields.io/badge/arXiv-physics.gen--ph-b31b1b.svg)](https://arxiv.org/)

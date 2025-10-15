@@ -11,7 +11,7 @@ pandoc:
 
 *Independent Researcher*
 
-**Date:** January 2025
+**Date:** October 15, 2025
 
 ---
 
@@ -499,7 +499,7 @@ All simulation data, including:
 - High-resolution figures (PNG, 300 DPI)
 - Complete simulation summary (TXT format)
 
-are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated GitHub repository.
+are archived with DOI: [Zenodo DOI](https://doi.org/10.5281/zenodo.17358243) and available at the associated GitHub repository.
 
 ---
 
@@ -508,11 +508,11 @@ are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated 
 **Figures:** 3  
 **Tables:** 1  
 **Code Availability:** [Bragg_Diffraction_1D_Simulation](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)  
-**Data Availability:** Zenodo DOI [10.5281/zenodo.XXXXXXX]
+**Data Availability:** [Zenodo DOI](https://doi.org/10.5281/zenodo.17358243) 
 
 ---
 
 *Correspondence:* Stefan Len, tqe.simulation@gmail.com, 
 [GitHub: @SteviLen420](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)
  
-*Date:* January 2025
+*Date:* October 15, 2025
