@@ -11,7 +11,7 @@ pandoc:
 
 *Independent Researcher*
 
-**Date:** January 2025
+**Date:** October 15, 2025
 
 ---
 
@@ -515,4 +515,4 @@ are archived with DOI: [Zenodo DOI](https://doi.org/10.5281/zenodo.17358243) and
 *Correspondence:* Stefan Len, tqe.simulation@gmail.com, 
 [GitHub: @SteviLen420](https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation)
  
-*Date:* January 2025
+*Date:* October 15, 2025
