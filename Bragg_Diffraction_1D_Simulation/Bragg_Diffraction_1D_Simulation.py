@@ -99,8 +99,6 @@ def save_metadata(save_path):
         json.dump(metadata, f, indent=2)
     print("Metadata saved.")
 
-
-
 def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
     """
     Transfer Matrix Method for 1D Bragg stack - CORRECTED.
@@ -112,65 +110,70 @@ def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
         d: period (total thickness of one unit cell)
         num_periods: number of periods
         n1, n2: refractive indices
-    
+        
     Returns:
         Reflectivity, Transmissivity
     """
-    # Each layer is d/2 thick
+    # Layer thicknesses
     d1 = d / 2
     d2 = d / 2
     
-    # Wave vectors
+    # Wave vectors in each medium
     k1 = 2 * np.pi * n1 / wavelength
     k2 = 2 * np.pi * n2 / wavelength
     
-    # Propagation matrices (diagonal form)
+    # Propagation phase shifts
     phi1 = k1 * d1
     phi2 = k2 * d2
     
-    # Interface matrices (continuity of E and H)
+    # --- Helper functions for matrix construction ---
+    
     def interface_matrix(n_a, n_b):
+        """Calculates the interface matrix from medium 'a' to 'b'."""
         return 0.5 * np.array([
             [1 + n_b/n_a, 1 - n_b/n_a],
             [1 - n_b/n_a, 1 + n_b/n_a]
         ], dtype=complex)
     
-    # Propagation matrix
     def prop_matrix(phi):
+        """Calculates the propagation matrix through a layer."""
         return np.array([
             [np.exp(1j * phi), 0],
             [0, np.exp(-1j * phi)]
         ], dtype=complex)
-    
-    # System matrix for one period
-    # Air -> n1 -> n2 -> Air
-    n0 = 1.0
-    
-    M = np.eye(2, dtype=complex)
-    M = M @ interface_matrix(n0, n1)
-    M = M @ prop_matrix(phi1)
-    M = M @ interface_matrix(n1, n2)
-    M = M @ prop_matrix(phi2)
-    M = M @ interface_matrix(n2, n1)
-    
-    # Repeat for N periods (simplified: same as matrix power)
-    M_total = np.linalg.matrix_power(M, num_periods)
-    
-    # Final interface back to air
-    M_total = M_total @ interface_matrix(n1, n0)
-    
-    # Extract coefficients
-    # M_total relates [A+, A-] input to [B+, B-] output
-    # For reflection: r = M_total[1,0] / M_total[0,0]
-    # For transmission: t = 1 / M_total[0,0]
-    
+
+    # --- Corrected TMM Logic ---
+
+    n0 = 1.0  # Refractive index of the surrounding medium (air)
+
+    # 1. Define the matrix for a single, repeatable unit cell (n1 -> n2)
+    # This is the matrix that gets exponentiated.
+    M_cell = (
+        prop_matrix(phi1) @
+        interface_matrix(n1, n2) @
+        prop_matrix(phi2) @
+        interface_matrix(n2, n1)
+    )
+
+    # 2. Calculate the matrix for the entire periodic stack by exponentiation
+    M_stack = np.linalg.matrix_power(M_cell, num_periods)
+
+    # 3. Form the total system matrix including entrance and exit interfaces (air -> stack -> air)
+    M_total = (
+        interface_matrix(n0, n1) @
+        M_stack @
+        interface_matrix(n1, n0)
+    )
+
+    # 4. Calculate reflectivity (r) and transmissivity (t) from the total matrix elements
     r = M_total[1, 0] / M_total[0, 0]
     t = 1.0 / M_total[0, 0]
     
+    # 5. Calculate power reflectivity (R) and transmissivity (T)
     R = np.abs(r)**2
     T = np.abs(t)**2
     
-    # Ensure physical values
+    # Ensure physical values between 0 and 1
     R = np.clip(R, 0, 1)
     T = np.clip(T, 0, 1)
     
