@@ -5,10 +5,27 @@
 # Bragg_Diffraction_1D_Simulation.py
 # ===================================================================================
 # Author: Stefan Len
+# Version: 3.1.0
+# 
 # Overview:
-#   Numerical simulation of Bragg diffraction in 1D periodic structures using
-#   Transfer Matrix Method (TMM). Validates against the analytical Bragg law for normal incidence.
-#   Generates plots, CSV outputs, and quantitative error summary automatically.
+#   Transfer Matrix Method (TMM) simulation of 1D Bragg diffraction in SiO₂/TiO₂
+#   multilayer stacks. Validates numerical reflectivity against analytical Bragg law
+#   (λ = 2·n_eff·d) with quadratic interpolation for sub-grid accuracy. Application:
+#   distributed Bragg reflector (DBR) design for VCSEL mirrors.
+#
+# Method:
+#   TMM with proper interface matrices, energy conservation check (R+T=1), and
+#   transmissivity as energy flux: T = (n_out/n_in)·|t|². Normal incidence only.
+#
+# Output:
+#   Reflectivity/transmissivity spectra (PNG), CSV data, validation plots, and
+#   comprehensive JSON/TXT summary. Typical accuracy: <0.5% error vs. theory.
+#
+# Usage:
+#   python Bragg_Diffraction_1D_Simulation.py
+#   Configure parameters in MASTER CONTROL section. Results in timestamped folders.
+#
+# Requires: Python ≥3.7, NumPy, Matplotlib
 # ===================================================================================
 
 import numpy as np
