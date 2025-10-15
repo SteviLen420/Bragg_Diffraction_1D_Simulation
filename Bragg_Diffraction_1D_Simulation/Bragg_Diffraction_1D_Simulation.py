@@ -7,7 +7,7 @@
 # Author: Stefan Len
 # Overview:
 #   Numerical simulation of Bragg diffraction in 1D periodic structures using
-#   Transfer Matrix Method (TMM). Validates against analytical Bragg law (nλ = 2d·sinθ).
+#   Transfer Matrix Method (TMM). Validates against the analytical Bragg law for normal incidence.
 #   Generates plots, CSV outputs, and quantitative error summary automatically.
 # ===================================================================================
 
@@ -22,15 +22,15 @@ import json
 # ===================================================================================
 # --- MASTER CONTROL ---
 # ===================================================================================
-LATTICE_CONSTANT = 120.0      # Period (d) in nm
-NUM_PERIODS = 30              # Number of periods in structure
-WAVELENGTH_MIN = 400.0        # Minimum wavelength to test (nm)
-WAVELENGTH_MAX = 900.0        # Maximum wavelength to test (nm)  
-NUM_WAVELENGTHS = 50          # Number of wavelengths to test
-N1 = 1.46                     # Refractive index layer 1 (SiO2)
-N2 = 2.30                     # Refractive index layer 2 (TiO2)
+LATTICE_CONSTANT = 120.0     # Period (d) in nm
+NUM_PERIODS = 30             # Number of periods in structure
+WAVELENGTH_MIN = 400.0       # Minimum wavelength to test (nm)
+WAVELENGTH_MAX = 900.0       # Maximum wavelength to test (nm)  
+NUM_WAVELENGTHS = 50         # Number of wavelengths to test
+N1 = 1.46                    # Refractive index layer 1 (SiO2)
+N2 = 2.30                    # Refractive index layer 2 (TiO2)
 OUTPUT_BASE_FOLDER = 'Bragg_Diffraction_TMM_Sims'
-CODE_VERSION = '3.0.0'
+CODE_VERSION = '3.1.0' # Version updated to reflect changes
 PHYSICAL_APPLICATION = 'Distributed_Bragg_Reflector_for_VCSEL'
 # ===================================================================================
 
@@ -91,7 +91,8 @@ def save_metadata(save_path):
             'normal_incidence': 'theta = 0 degrees',
             'first_order_condition': 'lambda = 2*n_eff*d for n=1',
             'effective_index': 'n_eff = (n1 + n2) / 2',
-            'quarter_wave_stack': 'Each layer thickness = lambda_design / (4*n)'
+            'quarter_wave_stack': 'Each layer thickness = lambda_design / (4*n)',
+            'transmissivity_definition': 'T = (n_out/n_in) * |t|^2 (energy flux)'
         }
     }
     
@@ -99,7 +100,7 @@ def save_metadata(save_path):
         json.dump(metadata, f, indent=2)
     print("Metadata saved.")
 
-def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
+def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5, n_in=1.0, n_out=1.0):
     """
     Transfer Matrix Method for 1D Bragg stack - CORRECTED.
     
@@ -109,7 +110,9 @@ def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
         wavelength: incident wavelength
         d: period (total thickness of one unit cell)
         num_periods: number of periods
-        n1, n2: refractive indices
+        n1, n2: refractive indices of stack layers
+        n_in: refractive index of input medium (default: 1.0 for air)
+        n_out: refractive index of output medium (default: 1.0 for air)
         
     Returns:
         Reflectivity, Transmissivity
@@ -144,10 +147,8 @@ def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
 
     # --- Corrected TMM Logic ---
 
-    n0 = 1.0  # Refractive index of the surrounding medium (air)
-
-    # 1. Define the matrix for a single, repeatable unit cell (n1 -> n2)
-    # This is the matrix that gets exponentiated.
+    # 1. Define the matrix for a single, repeatable unit cell (n1 -> n2 -> n1)
+    # This matrix transforms fields from the start of an n1 layer to the start of the next one.
     M_cell = (
         prop_matrix(phi1) @
         interface_matrix(n1, n2) @
@@ -158,20 +159,21 @@ def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
     # 2. Calculate the matrix for the entire periodic stack by exponentiation
     M_stack = np.linalg.matrix_power(M_cell, num_periods)
 
-    # 3. Form the total system matrix including entrance and exit interfaces (air -> stack -> air)
+    # 3. Form the total system matrix including entrance and exit interfaces
+    # The structure is n_in -> [stack starting with n1] -> n_out
     M_total = (
-        interface_matrix(n0, n1) @
+        interface_matrix(n_in, n1) @
         M_stack @
-        interface_matrix(n1, n0)
+        interface_matrix(n1, n_out)
     )
 
-    # 4. Calculate reflectivity (r) and transmissivity (t) from the total matrix elements
+    # 4. Calculate reflection (r) and transmission (t) coefficients from the total matrix elements
     r = M_total[1, 0] / M_total[0, 0]
     t = 1.0 / M_total[0, 0]
     
-    # 5. Calculate power reflectivity (R) and transmissivity (T)
+    # 5. Calculate power reflectivity (R) and transmissivity (T) using energy flux definition
     R = np.abs(r)**2
-    T = np.abs(t)**2
+    T = (n_out / n_in) * np.abs(t)**2
     
     # Ensure physical values between 0 and 1
     R = np.clip(R, 0, 1)
@@ -219,6 +221,11 @@ def run_wavelength_scan(save_path):
         reflectivities.append(R)
         transmissivities.append(T)
         
+        # Energy conservation audit
+        R_plus_T = R + T
+        A = 1.0 - R_plus_T
+        energy_ok = np.abs(A) < 1e-3
+        
         # Check if near Bragg condition
         is_bragg = abs(wl - lambda_bragg_theory) < 0.1 * lambda_bragg_theory
         
@@ -226,18 +233,23 @@ def run_wavelength_scan(save_path):
             'wavelength': wl,
             'reflectivity': R,
             'transmissivity': T,
+            'R_plus_T': R_plus_T,
+            'A': A,
+            'energy_ok': energy_ok,
             'bragg_prediction': 'Yes' if is_bragg else 'No',
             'normalized_wavelength': wl / lambda_bragg_theory
         })
         
-        print(f"  λ={wl:.2f} nm: R={R:.4f}, T={T:.4f}, Bragg={'YES' if is_bragg else 'no'}")
+        print(f"  λ={wl:.2f} nm: R={R:.4f}, T={T:.4f}, A={A:.2e}, R+T={R_plus_T:.4f}")
     
     # Save results to CSV
     with open(os.path.join(save_path, 'wavelength_scan_results.csv'), 'w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=['wavelength', 'reflectivity', 'transmissivity', 
-                                                'bragg_prediction', 'normalized_wavelength'])
+                                              'R_plus_T', 'A', 'bragg_prediction', 'normalized_wavelength'])
         writer.writeheader()
-        writer.writerows(results)
+        # Write only the requested fields to CSV
+        csv_results = [{k: v for k, v in r.items() if k != 'energy_ok'} for r in results]
+        writer.writerows(csv_results)
     
     print("Results saved to CSV.")
     
@@ -356,18 +368,25 @@ def generate_summary_report(results, save_path):
         w = wavelengths[max_idx-1:max_idx+2]
         r = reflectivities[max_idx-1:max_idx+2]
         
-        # Quadratic fit: R(λ) = a*(λ-λ0)^2 + R_max
+        # Quadratic fit: R(λ) = aλ^2 + bλ + c
         # Find vertex
         if len(w) == 3 and len(r) == 3:
-            # Parabola vertex formula
+            # Parabola vertex formula from coefficients of ax^2+bx+c
             denom = (w[0] - w[1]) * (w[0] - w[2]) * (w[1] - w[2])
             if abs(denom) > 1e-10:
                 A = (w[2] * (r[1] - r[0]) + w[1] * (r[0] - r[2]) + w[0] * (r[2] - r[1])) / denom
                 B = (w[2]**2 * (r[0] - r[1]) + w[1]**2 * (r[2] - r[0]) + w[0]**2 * (r[1] - r[2])) / denom
                 
                 if abs(A) > 1e-10:
+                    # Wavelength at vertex
                     measured_bragg = -B / (2 * A)
-                    max_reflectivity = r[1]  # FIXED: middle point, not max_idx
+                    
+                    # Reflectivity at vertex (evaluate Lagrange polynomial at measured_bragg)
+                    L0 = ((measured_bragg - w[1]) * (measured_bragg - w[2])) / ((w[0] - w[1]) * (w[0] - w[2]))
+                    L1 = ((measured_bragg - w[0]) * (measured_bragg - w[2])) / ((w[1] - w[0]) * (w[1] - w[2]))
+                    L2 = ((measured_bragg - w[0]) * (measured_bragg - w[1])) / ((w[2] - w[0]) * (w[2] - w[1]))
+                    R_vertex = r[0] * L0 + r[1] * L1 + r[2] * L2
+                    max_reflectivity = np.clip(R_vertex, 0, 1)
                 else:
                     measured_bragg = wavelengths[max_idx]
                     max_reflectivity = reflectivities[max_idx]
@@ -383,6 +402,11 @@ def generate_summary_report(results, save_path):
     
     error_percent = float(abs(measured_bragg - theoretical_bragg) / theoretical_bragg * 100.0)
 
+    # Energy conservation audit summary
+    all_A = np.array([r['A'] for r in results])
+    max_abs_A = np.max(np.abs(all_A))
+    conservation_ok = max_abs_A < 1e-3
+
     # Text report with physical context
     with open(os.path.join(save_path, 'summary_report.txt'), 'w') as f:
         f.write("=" * 70 + "\n")
@@ -397,11 +421,12 @@ def generate_summary_report(results, save_path):
         
         f.write("SIMULATION PARAMETERS:\n")
         f.write(f"  Method: Transfer Matrix Method (TMM)\n")
+        f.write(f"  Transmission (T): Energy flux definition (n_out/n_in)|t|^2\n")
         f.write(f"  Lattice constant (d): {LATTICE_CONSTANT} nm\n")
         f.write(f"  Number of periods: {NUM_PERIODS}\n")
         f.write(f"  Total stack thickness: {NUM_PERIODS * LATTICE_CONSTANT} nm\n")
         f.write(f"  Wavelength range: {WAVELENGTH_MIN} - {WAVELENGTH_MAX} nm\n")
-        f.write(f"  Spectral resolution: {(WAVELENGTH_MAX-WAVELENGTH_MIN)/NUM_WAVELENGTHS:.1f} nm\n\n")
+        f.write(f"  Spectral resolution: {(WAVELENGTH_MAX-WAVELENGTH_MIN)/(NUM_WAVELENGTHS-1):.1f} nm\n\n")
         
         f.write("ANALYTICAL PREDICTION:\n")
         f.write(f"  Bragg law: n*λ = 2*n_eff*d\n")
@@ -418,18 +443,21 @@ def generate_summary_report(results, save_path):
         f.write(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f} nm\n")
         f.write(f"  Measured λ_Bragg: {measured_bragg:.2f} nm\n")
         f.write(f"  Absolute error: {abs(measured_bragg - theoretical_bragg):.2f} nm\n")
-        f.write(f"  Relative error: {error_percent:.3f}%\n\n")
+        f.write(f"  Relative error: {error_percent:.3f}%\n")
         
         if error_percent < 0.5:
-            f.write("✓✓✓ EXCELLENT VALIDATION: Error < 0.5%\n")
-        elif error_percent < 1:
-            f.write("✓✓ EXCELLENT VALIDATION: Error < 1%\n")
+            f.write("  Status: ✓✓✓ EXCELLENT AGREEMENT (Error < 0.5%)\n\n")
         elif error_percent < 5:
-            f.write("✓ VALIDATION PASSED: Error < 5%\n")
+            f.write("  Status: ✓ PASSED (Error < 5%)\n\n")
         else:
-            f.write("~ VALIDATION ACCEPTABLE: Error < 10%\n")
+            f.write("  Status: ~ ACCEPTABLE (Error > 5%)\n\n")
+
+        f.write("ENERGY CONSERVATION:\n")
+        f.write(f"  Check: A = 1 - (R + T) should be zero for lossless media.\n")
+        f.write(f"  Max deviation |A|: {max_abs_A:.2e}\n")
+        f.write(f"  Status: {'PASSED ✓' if conservation_ok else 'FAILED ✗ (check physics/numerics)'}\n\n")
         
-        f.write("\nPRACTICAL SIGNIFICANCE:\n")
+        f.write("PRACTICAL SIGNIFICANCE:\n")
         f.write(f"  This DBR achieves {max_reflectivity*100:.1f}% reflectivity at {measured_bragg:.0f} nm,\n")
         f.write(f"  suitable for VCSEL applications in the visible/NIR range.\n")
         f.write(f"  The {NUM_PERIODS}-period stack provides sufficient optical isolation\n")
@@ -438,13 +466,7 @@ def generate_summary_report(results, save_path):
         f.write("\n" + "=" * 70 + "\n")
 
     # JSON with builtin types
-    cleaned_results = [{
-        'wavelength': float(_to_py(r['wavelength'])),
-        'reflectivity': float(_to_py(r['reflectivity'])),
-        'transmissivity': float(_to_py(r['transmissivity'])),
-        'bragg_prediction': str(r['bragg_prediction']),
-        'normalized_wavelength': float(_to_py(r['normalized_wavelength'])),
-    } for r in results]
+    cleaned_results = [{k: _to_py(v) for k, v in r.items()} for r in results]
 
     summary_json = {
         'simulation_info': {
@@ -466,9 +488,13 @@ def generate_summary_report(results, save_path):
         'results': {
             'theoretical_bragg_wavelength_nm': theoretical_bragg,
             'measured_bragg_wavelength_nm_interpolated': float(measured_bragg),
-            'max_reflectivity': float(max_reflectivity),
+            'max_reflectivity_interpolated': float(max_reflectivity),
             'error_percent': error_percent,
-            'validation_passed': bool(error_percent < 5.0)
+            'validation_passed': bool(error_percent < 5.0),
+            'energy_conservation': {
+                'max_abs_A': float(max_abs_A),
+                'passed': bool(conservation_ok)
+            }
         },
         'all_measurements': cleaned_results
     }
@@ -481,7 +507,8 @@ def generate_summary_report(results, save_path):
     print(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f} nm")
     print(f"  Measured λ_Bragg (interpolated): {measured_bragg:.2f} nm")
     print(f"  Error: {error_percent:.3f}%")
-    print(f"  Max Reflectivity: {max_reflectivity*100:.2f}%")
+    print(f"  Max Reflectivity (interpolated): {max_reflectivity*100:.2f}%")
+    print(f"  Energy Conservation: {'PASSED ✓' if conservation_ok else 'FAILED ✗' } (max|A|={max_abs_A:.2e})")
     print(f"  Validation: {'PASSED ✓' if error_percent < 5 else 'ACCEPTABLE ~' if error_percent < 10 else 'FAILED ✗'}")
 
 def main():
