@@ -299,12 +299,6 @@ def create_validation_plot(wavelengths, reflectivities, save_path):
 
 def _to_py(x):
     import numpy as np
-    if isinstance(x, np.generic):
-        return x.item()
-    return x
-
-def _to_py(x):
-    import numpy as np
     return x.item() if isinstance(x, np.generic) else x
 
 def generate_summary_report(results, save_path):
