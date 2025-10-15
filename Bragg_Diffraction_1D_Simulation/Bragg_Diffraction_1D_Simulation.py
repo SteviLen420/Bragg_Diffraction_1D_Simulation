@@ -122,48 +122,26 @@ def create_periodic_potential(x, d, num_periods, strength):
     
     return potential
 
-def simulate_wave_propagation(x, wavelength, potential):
-    """
-    Simulate wave propagation through periodic structure using transfer matrix.
-    
-    Args:
-        x: Spatial grid
-        wavelength: Wavelength of incident wave
-        potential: Periodic potential array
-    
-    Returns:
-        Reflectivity and transmissivity
-    """
-    k = 2 * np.pi / wavelength
-    dx = x[1] - x[0]
-    
-    # Initialize wave (incident from left)
-    psi = np.zeros(len(x), dtype=complex)
-    psi[0] = 1.0  # Incident amplitude
-    
-    # Simple propagation with potential scattering
-    for i in range(1, len(x)):
-        # Phase accumulation
-        phase = k * dx
-        
-        # Scattering from potential
-        if potential[i] > 0:
-            # Reflection coefficient (simplified)
-            r = potential[i] * 0.1 * np.exp(1j * phase)
-            psi[i] = psi[i-1] * np.exp(1j * phase) * (1 - r)
-        else:
-            psi[i] = psi[i-1] * np.exp(1j * phase)
-    
-    # Calculate reflection and transmission
-    # Reflection: look at backward-going wave component
-    # Simplified: compare amplitudes at boundaries
-    incident_intensity = np.abs(psi[0])**2
-    transmitted_intensity = np.abs(psi[-1])**2
-    
-    transmissivity = transmitted_intensity / incident_intensity
-    reflectivity = 1.0 - transmissivity  # Conservation (simplified)
-    
-    return reflectivity, transmissivity, psi
+def simulate_wave_propagation_TMM(wavelength, d, num_periods, n1=1.0, n2=1.5):
+    """Transfer Matrix Method for a 1D Bragg stack."""
+    k1 = 2 * np.pi * n1 / wavelength
+    k2 = 2 * np.pi * n2 / wavelength
+
+    # One period = two layers
+    M1 = np.array([[np.cos(k1 * d / 2), -1j * np.sin(k1 * d / 2)],
+                   [-1j * np.sin(k1 * d / 2), np.cos(k1 * d / 2)]])
+    M2 = np.array([[np.cos(k2 * d / 2), -1j * np.sin(k2 * d / 2)],
+                   [-1j * np.sin(k2 * d / 2), np.cos(k2 * d / 2)]])
+    M_period = M1 @ M2
+
+    # Multiply N periods
+    M_total = np.linalg.matrix_power(M_period, num_periods)
+
+    # Reflectivity and transmissivity
+    R = abs(M_total[1, 0] / M_total[0, 0])**2
+    T = 1 / abs(M_total[0, 0])**2
+
+    return R, T
 
 def analytical_bragg_condition(wavelength, d, order=1):
     """
