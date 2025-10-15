@@ -505,7 +505,7 @@ are archived with DOI: [10.5281/zenodo.XXXXXXX] and available at the associated 
 
 ---
 
-*Correspondence:* Stefan Len, [email], [GitHub: @username]
+*Correspondence:* Stefan Len, tqe.simulation@gmail.com, [GitHub: @SteviLen420]
 
 *Submitted to:* arXiv [physics.gen-ph]  
 *Date:* January 2025
