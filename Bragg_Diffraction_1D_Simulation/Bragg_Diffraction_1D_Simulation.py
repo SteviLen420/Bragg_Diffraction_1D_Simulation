@@ -6,10 +6,9 @@
 # ===================================================================================
 # Author: Stefan Len
 # Overview:
-#   Numerical simulation of Bragg diffraction in 1D periodic structures.
-#   Implements wave propagation through periodic potential and validates
-#   against analytical Bragg law (nλ = 2d·sinθ). Generates plots, CSV outputs,
-#   and quantitative error summary automatically.
+#   Numerical simulation of Bragg diffraction in 1D periodic structures using
+#   Transfer Matrix Method (TMM). Validates against analytical Bragg law (nλ = 2d·sinθ).
+#   Generates plots, CSV outputs, and quantitative error summary automatically.
 # ===================================================================================
 
 import numpy as np
@@ -23,15 +22,15 @@ import json
 # ===================================================================================
 # --- MASTER CONTROL ---
 # ===================================================================================
-GRID_SIZE = 2000              # Number of spatial points
-LATTICE_CONSTANT = 10.0       # Spacing between scatterers (d)
-NUM_PERIODS = 20              # Number of periods in structure
-WAVELENGTH_MIN = 8.0          # Minimum wavelength to test
-WAVELENGTH_MAX = 25.0         # Maximum wavelength to test
-NUM_WAVELENGTHS = 10          # Number of wavelengths to test
-POTENTIAL_STRENGTH = 1.0      # Strength of periodic potential
-OUTPUT_BASE_FOLDER = 'Bragg_Diffraction_Sims'
-CODE_VERSION = '1.0.0'
+LATTICE_CONSTANT = 100.0      # Period (d) in nm
+NUM_PERIODS = 10              # Number of periods in structure
+WAVELENGTH_MIN = 150.0        # Minimum wavelength to test (nm)
+WAVELENGTH_MAX = 250.0        # Maximum wavelength to test (nm)
+NUM_WAVELENGTHS = 20          # Number of wavelengths to test
+N1 = 1.0                      # Refractive index layer 1
+N2 = 1.5                      # Refractive index layer 2
+OUTPUT_BASE_FOLDER = 'Bragg_Diffraction_TMM_Sims'
+CODE_VERSION = '2.0.0'
 # ===================================================================================
 
 def setup_colab_environment():
@@ -40,14 +39,6 @@ def setup_colab_environment():
     
     if 'google.colab' in sys.modules:
         print("Colab detected.")
-        
-        # Install required packages if missing
-        try:
-            import scipy
-        except ImportError:
-            print("Installing scipy...")
-            os.system('pip install scipy > /dev/null 2>&1')
-            print("scipy installed.")
         
         try:
             from google.colab import drive
@@ -74,19 +65,20 @@ def save_metadata(save_path):
     metadata = {
         'timestamp': datetime.now().isoformat(),
         'code_version': CODE_VERSION,
-        'simulation_type': 'Bragg_Diffraction_1D',
+        'simulation_type': 'Bragg_Diffraction_TMM',
+        'method': 'Transfer_Matrix_Method',
         'parameters': {
-            'grid_size': GRID_SIZE,
             'lattice_constant_d': LATTICE_CONSTANT,
             'num_periods': NUM_PERIODS,
-            'wavelength_range': [WAVELENGTH_MIN, WAVELENGTH_MAX],
+            'wavelength_range_nm': [WAVELENGTH_MIN, WAVELENGTH_MAX],
             'num_wavelengths': NUM_WAVELENGTHS,
-            'potential_strength': POTENTIAL_STRENGTH
+            'refractive_indices': {'n1': N1, 'n2': N2}
         },
         'physics': {
-            'bragg_law': 'n*lambda = 2*d*sin(theta)',
-            'normal_incidence': 'theta = 90 degrees',
-            'first_order_condition': 'lambda = 2*d for n=1'
+            'bragg_law': 'n*lambda = 2*n_eff*d',
+            'normal_incidence': 'theta = 0 degrees',
+            'first_order_condition': 'lambda = 2*n_eff*d for n=1',
+            'effective_index': 'n_eff = (n1 + n2) / 2'
         }
     }
     
@@ -94,118 +86,121 @@ def save_metadata(save_path):
         json.dump(metadata, f, indent=2)
     print("Metadata saved.")
 
-def create_periodic_potential(x, d, num_periods, strength):
+def transfer_matrix_single_layer(n, d, wavelength):
     """
-    Create 1D periodic potential (square wave).
+    Transfer matrix for a single homogeneous layer.
     
     Args:
-        x: Spatial grid
-        d: Lattice constant (period)
-        num_periods: Number of periods
-        strength: Potential strength
+        n: refractive index
+        d: thickness
+        wavelength: wavelength in same units as d
     
     Returns:
-        Periodic potential array
+        2x2 transfer matrix
     """
-    potential = np.zeros_like(x)
-    total_length = num_periods * d
-    center = len(x) // 2
-    start_idx = center - int(total_length / 2)
-    end_idx = center + int(total_length / 2)
+    k = 2 * np.pi * n / wavelength
+    phi = k * d
     
-    for i in range(start_idx, end_idx):
-        if i >= 0 and i < len(x):
-            phase = (x[i] - x[start_idx]) / d
-            # Square wave: 1 for half period, 0 for other half
-            if phase % 1.0 < 0.5:
-                potential[i] = strength
+    M = np.array([
+        [np.cos(phi), -1j * np.sin(phi) / n],
+        [-1j * n * np.sin(phi), np.cos(phi)]
+    ], dtype=complex)
     
-    return potential
+    return M
 
-def simulate_wave_propagation_TMM(wavelength, d, num_periods, n1=1.0, n2=1.5):
-    """Transfer Matrix Method for a 1D Bragg stack."""
-    k1 = 2 * np.pi * n1 / wavelength
-    k2 = 2 * np.pi * n2 / wavelength
-
-    # One period = two layers
-    M1 = np.array([[np.cos(k1 * d / 2), -1j * np.sin(k1 * d / 2)],
-                   [-1j * np.sin(k1 * d / 2), np.cos(k1 * d / 2)]])
-    M2 = np.array([[np.cos(k2 * d / 2), -1j * np.sin(k2 * d / 2)],
-                   [-1j * np.sin(k2 * d / 2), np.cos(k2 * d / 2)]])
-    M_period = M1 @ M2
-
-    # Multiply N periods
+def simulate_bragg_stack_tmm(wavelength, d, num_periods, n1=1.0, n2=1.5):
+    """
+    Transfer Matrix Method for 1D Bragg stack.
+    
+    Two layers per period: quarter-wave stack at design wavelength.
+    
+    Args:
+        wavelength: incident wavelength
+        d: period (total thickness of one unit cell)
+        num_periods: number of periods
+        n1, n2: refractive indices
+    
+    Returns:
+        Reflectivity, Transmissivity
+    """
+    # Each layer is d/2 thick
+    d1 = d / 2
+    d2 = d / 2
+    
+    # Transfer matrix for one period (two layers)
+    M1 = transfer_matrix_single_layer(n1, d1, wavelength)
+    M2 = transfer_matrix_single_layer(n2, d2, wavelength)
+    M_period = M2 @ M1
+    
+    # Total transfer matrix (N periods)
     M_total = np.linalg.matrix_power(M_period, num_periods)
-
-    # Reflectivity and transmissivity
-    R = abs(M_total[1, 0] / M_total[0, 0])**2
-    T = 1 / abs(M_total[0, 0])**2
-
+    
+    # Extract reflection and transmission coefficients
+    # Assuming incidence from medium with n=1
+    n_in = 1.0
+    n_out = 1.0
+    
+    r = M_total[1, 0] / M_total[0, 0]
+    t = 1.0 / M_total[0, 0]
+    
+    # Reflectivity and Transmissivity
+    R = np.abs(r)**2
+    T = np.abs(t)**2 * (n_out / n_in)
+    
     return R, T
 
-def analytical_bragg_condition(wavelength, d, order=1):
+def analytical_bragg_wavelength(d, n1, n2, order=1):
     """
-    Analytical Bragg condition for normal incidence.
+    Analytical Bragg wavelength for quarter-wave stack.
     
-    For normal incidence (θ = 90°), sin(θ) = 1
-    Bragg law: n*λ = 2*d*sin(θ)
-    At normal incidence: n*λ = 2*d
+    For normal incidence: λ_Bragg = 2 * n_eff * d / order
+    where n_eff = (n1 + n2) / 2 (approximation)
     
-    Returns True if Bragg condition is satisfied for given order.
+    Args:
+        d: period
+        n1, n2: refractive indices
+        order: diffraction order
+    
+    Returns:
+        Bragg wavelength
     """
-    bragg_wavelength = 2 * d / order
-    tolerance = 0.1 * d  # 10% tolerance
-    return abs(wavelength - bragg_wavelength) < tolerance
+    n_eff = (n1 + n2) / 2.0
+    return 2.0 * n_eff * d / order
 
 def run_wavelength_scan(save_path):
     """
-    Scan through wavelengths and measure reflectivity.
+    Scan through wavelengths and measure reflectivity using TMM.
     Compare with analytical Bragg condition.
     """
-    print("\n--- Wavelength Scan ---")
-    
-    # Create spatial grid
-    x = np.linspace(0, GRID_SIZE, GRID_SIZE)
-    
-    # Create periodic potential
-    potential = create_periodic_potential(x, LATTICE_CONSTANT, NUM_PERIODS, POTENTIAL_STRENGTH)
-    
-    # Save potential profile
-    plt.figure(figsize=(12, 4))
-    plt.plot(x, potential, 'k-', linewidth=1)
-    plt.xlabel('Position (arbitrary units)', fontsize=12)
-    plt.ylabel('Potential Strength', fontsize=12)
-    plt.title(f'Periodic Potential (d={LATTICE_CONSTANT}, N={NUM_PERIODS})', fontsize=14)
-    plt.grid(True, alpha=0.3)
-    plt.savefig(os.path.join(save_path, 'potential_profile.png'), dpi=300, bbox_inches='tight')
-    plt.close()
+    print("\n--- Wavelength Scan (TMM) ---")
     
     # Test wavelengths
     wavelengths = np.linspace(WAVELENGTH_MIN, WAVELENGTH_MAX, NUM_WAVELENGTHS)
     reflectivities = []
     transmissivities = []
-    bragg_predictions = []
     
     results = []
     
+    # Theoretical Bragg wavelength
+    lambda_bragg_theory = analytical_bragg_wavelength(LATTICE_CONSTANT, N1, N2, order=1)
+    
     for wl in wavelengths:
-        R, T, psi = simulate_wave_propagation(x, wl, potential)
+        R, T = simulate_bragg_stack_tmm(wl, LATTICE_CONSTANT, NUM_PERIODS, N1, N2)
         reflectivities.append(R)
         transmissivities.append(T)
         
-        # Check Bragg condition (first order)
-        is_bragg = analytical_bragg_condition(wl, LATTICE_CONSTANT, order=1)
-        bragg_predictions.append(1.0 if is_bragg else 0.0)
+        # Check if near Bragg condition
+        is_bragg = abs(wl - lambda_bragg_theory) < 0.1 * lambda_bragg_theory
         
         results.append({
             'wavelength': wl,
             'reflectivity': R,
             'transmissivity': T,
             'bragg_prediction': 'Yes' if is_bragg else 'No',
-            'normalized_wavelength': wl / (2 * LATTICE_CONSTANT)
+            'normalized_wavelength': wl / lambda_bragg_theory
         })
         
-        print(f"  λ={wl:.2f}: R={R:.4f}, T={T:.4f}, Bragg={'YES' if is_bragg else 'no'}")
+        print(f"  λ={wl:.2f} nm: R={R:.4f}, T={T:.4f}, Bragg={'YES' if is_bragg else 'no'}")
     
     # Save results to CSV
     with open(os.path.join(save_path, 'wavelength_scan_results.csv'), 'w', newline='') as f:
@@ -220,26 +215,54 @@ def run_wavelength_scan(save_path):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
     
     # Reflectivity vs wavelength
-    ax1.plot(wavelengths, reflectivities, 'b-o', linewidth=2, markersize=6, label='Numerical')
-    ax1.axvline(2 * LATTICE_CONSTANT, color='r', linestyle='--', linewidth=2, 
-                label=f'Bragg (n=1): λ={2*LATTICE_CONSTANT:.1f}')
+    ax1.plot(wavelengths, reflectivities, 'b-o', linewidth=2, markersize=6, label='TMM Numerical')
+    ax1.axvline(lambda_bragg_theory, color='r', linestyle='--', linewidth=2, 
+                label=f'Bragg (n=1): λ={lambda_bragg_theory:.1f} nm')
     ax1.set_ylabel('Reflectivity', fontsize=12)
-    ax1.set_title('Bragg Diffraction: Reflectivity vs Wavelength', fontsize=14)
+    ax1.set_title('Bragg Diffraction (TMM): Reflectivity vs Wavelength', fontsize=14)
     ax1.legend()
     ax1.grid(True, alpha=0.3)
+    ax1.set_ylim([-0.05, 1.05])
     
     # Transmissivity vs wavelength
     ax2.plot(wavelengths, transmissivities, 'g-o', linewidth=2, markersize=6)
-    ax2.axvline(2 * LATTICE_CONSTANT, color='r', linestyle='--', linewidth=2)
-    ax2.set_xlabel('Wavelength (arbitrary units)', fontsize=12)
+    ax2.axvline(lambda_bragg_theory, color='r', linestyle='--', linewidth=2)
+    ax2.set_xlabel('Wavelength (nm)', fontsize=12)
     ax2.set_ylabel('Transmissivity', fontsize=12)
     ax2.grid(True, alpha=0.3)
+    ax2.set_ylim([-0.05, 1.05])
     
     plt.tight_layout()
     plt.savefig(os.path.join(save_path, 'reflectivity_spectrum.png'), dpi=300, bbox_inches='tight')
     plt.close()
     
     print("Reflectivity spectrum saved.")
+    
+    # Create structure diagram
+    fig, ax = plt.subplots(figsize=(12, 3))
+    
+    for i in range(NUM_PERIODS):
+        # Layer 1 (n1)
+        x_start = i * LATTICE_CONSTANT
+        x_end = x_start + LATTICE_CONSTANT / 2
+        ax.fill_between([x_start, x_end], 0, N1, alpha=0.7, color='blue', edgecolor='black', linewidth=0.5)
+        
+        # Layer 2 (n2)
+        x_start = x_end
+        x_end = x_start + LATTICE_CONSTANT / 2
+        ax.fill_between([x_start, x_end], 0, N2, alpha=0.7, color='red', edgecolor='black', linewidth=0.5)
+    
+    ax.set_xlabel('Position (nm)', fontsize=12)
+    ax.set_ylabel('Refractive Index', fontsize=12)
+    ax.set_title(f'Bragg Stack Structure (N={NUM_PERIODS} periods, d={LATTICE_CONSTANT} nm)', fontsize=14)
+    ax.set_ylim([0, max(N1, N2) * 1.2])
+    ax.grid(True, alpha=0.3, axis='x')
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(save_path, 'bragg_stack_structure.png'), dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print("Structure diagram saved.")
     
     return wavelengths, reflectivities, results
 
@@ -249,25 +272,29 @@ def create_validation_plot(wavelengths, reflectivities, save_path):
     """
     print("\n--- Creating Validation Plot ---")
     
-    # Normalized wavelength (λ/2d)
-    normalized_wl = wavelengths / (2 * LATTICE_CONSTANT)
+    # Theoretical Bragg wavelength
+    lambda_bragg = analytical_bragg_wavelength(LATTICE_CONSTANT, N1, N2, order=1)
+    
+    # Normalized wavelength
+    normalized_wl = wavelengths / lambda_bragg
     
     fig, ax = plt.subplots(figsize=(10, 6))
     
     # Plot numerical reflectivity
     ax.plot(normalized_wl, reflectivities, 'b-o', linewidth=2, markersize=8, 
-            label='Numerical Simulation')
+            label='TMM Numerical Simulation')
     
-    # Mark Bragg condition (λ/2d = 1 for first order)
+    # Mark Bragg condition (λ/λ_Bragg = 1 for first order)
     ax.axvline(1.0, color='r', linestyle='--', linewidth=2, 
-               label='Bragg Condition (n=1)')
-    ax.axhspan(0.9, 1.1, alpha=0.2, color='red', label='Bragg Region (±10%)')
+               label='Analytical Bragg Condition (n=1)')
+    ax.axvspan(0.95, 1.05, alpha=0.2, color='red', label='Bragg Region (±5%)')
     
-    ax.set_xlabel('Normalized Wavelength (λ/2d)', fontsize=14)
+    ax.set_xlabel('Normalized Wavelength (λ/λ_Bragg)', fontsize=14)
     ax.set_ylabel('Reflectivity', fontsize=14)
-    ax.set_title('Validation: Numerical vs Analytical Bragg Law', fontsize=16)
+    ax.set_title('Validation: TMM vs Analytical Bragg Law', fontsize=16)
     ax.legend(fontsize=12)
     ax.grid(True, alpha=0.3)
+    ax.set_ylim([-0.05, 1.05])
     
     plt.tight_layout()
     plt.savefig(os.path.join(save_path, 'validation_plot.png'), dpi=300, bbox_inches='tight')
@@ -276,46 +303,57 @@ def create_validation_plot(wavelengths, reflectivities, save_path):
     print("Validation plot saved.")
 
 def _to_py(x):
-    import numpy as np
+    """Convert numpy types to Python native types."""
     return x.item() if isinstance(x, np.generic) else x
 
 def generate_summary_report(results, save_path):
-    """Generate text and JSON reports using only builtin types."""
+    """Generate comprehensive summary report."""
     print("\n--- Generating Summary Report ---")
 
+    # Theoretical Bragg wavelength
+    theoretical_bragg = float(analytical_bragg_wavelength(LATTICE_CONSTANT, N1, N2, order=1))
+    
+    # Find wavelength with maximum reflectivity
     max_r_idx = int(np.argmax([float(_to_py(r['reflectivity'])) for r in results]))
     max_r_result = results[max_r_idx]
-
-    theoretical_bragg = float(2 * LATTICE_CONSTANT)
     measured_bragg = float(_to_py(max_r_result['wavelength']))
+    
     error_percent = float(abs(measured_bragg - theoretical_bragg) / theoretical_bragg * 100.0)
 
     # Text report
     with open(os.path.join(save_path, 'summary_report.txt'), 'w') as f:
         f.write("=" * 70 + "\n")
-        f.write("BRAGG DIFFRACTION SIMULATION - SUMMARY REPORT\n")
+        f.write("BRAGG DIFFRACTION SIMULATION (TMM) - SUMMARY REPORT\n")
         f.write("=" * 70 + "\n\n")
         f.write("SIMULATION PARAMETERS:\n")
-        f.write(f"  Lattice constant (d): {LATTICE_CONSTANT}\n")
+        f.write(f"  Method: Transfer Matrix Method (TMM)\n")
+        f.write(f"  Lattice constant (d): {LATTICE_CONSTANT} nm\n")
         f.write(f"  Number of periods: {NUM_PERIODS}\n")
-        f.write(f"  Wavelength range: {WAVELENGTH_MIN} - {WAVELENGTH_MAX}\n")
-        f.write(f"  Grid size: {GRID_SIZE} points\n\n")
+        f.write(f"  Refractive indices: n1={N1}, n2={N2}\n")
+        f.write(f"  Wavelength range: {WAVELENGTH_MIN} - {WAVELENGTH_MAX} nm\n\n")
         f.write("ANALYTICAL PREDICTION:\n")
-        f.write("  Bragg law: n*λ = 2*d*sin(θ)\n")
-        f.write("  Normal incidence: θ = 90°, sin(θ) = 1\n")
-        f.write(f"  First order (n=1): λ_Bragg = 2*d = {theoretical_bragg:.2f}\n\n")
-        f.write("NUMERICAL RESULTS:\n")
+        f.write(f"  Bragg law: n*λ = 2*n_eff*d\n")
+        f.write(f"  Effective index: n_eff = (n1+n2)/2 = {(N1+N2)/2:.2f}\n")
+        f.write(f"  First order (n=1): λ_Bragg = {theoretical_bragg:.2f} nm\n\n")
+        f.write("NUMERICAL RESULTS (TMM):\n")
         f.write(f"  Maximum reflectivity: {float(_to_py(max_r_result['reflectivity'])):.4f}\n")
-        f.write(f"  At wavelength: {measured_bragg:.2f}\n")
-        f.write(f"  Normalized (λ/2d): {float(_to_py(max_r_result['normalized_wavelength'])):.4f}\n\n")
+        f.write(f"  At wavelength: {measured_bragg:.2f} nm\n")
+        f.write(f"  Normalized (λ/λ_Bragg): {float(_to_py(max_r_result['normalized_wavelength'])):.4f}\n\n")
         f.write("VALIDATION:\n")
-        f.write(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f}\n")
-        f.write(f"  Measured λ_Bragg: {measured_bragg:.2f}\n")
-        f.write(f"  Absolute error: {abs(measured_bragg - theoretical_bragg):.2f}\n")
+        f.write(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f} nm\n")
+        f.write(f"  Measured λ_Bragg: {measured_bragg:.2f} nm\n")
+        f.write(f"  Absolute error: {abs(measured_bragg - theoretical_bragg):.2f} nm\n")
         f.write(f"  Relative error: {error_percent:.2f}%\n\n")
-        f.write("✓ VALIDATION PASSED: Error < 5%\n" if error_percent < 5
-                else "~ VALIDATION ACCEPTABLE: Error < 10%\n" if error_percent < 10
-                else "✗ VALIDATION FAILED: Error > 10%\n")
+        
+        if error_percent < 1:
+            f.write("✓✓ EXCELLENT VALIDATION: Error < 1%\n")
+        elif error_percent < 5:
+            f.write("✓ VALIDATION PASSED: Error < 5%\n")
+        elif error_percent < 10:
+            f.write("~ VALIDATION ACCEPTABLE: Error < 10%\n")
+        else:
+            f.write("✗ VALIDATION FAILED: Error > 10%\n")
+        
         f.write("\n" + "=" * 70 + "\n")
 
     # JSON with builtin types
@@ -331,19 +369,21 @@ def generate_summary_report(results, save_path):
         'simulation_info': {
             'code_version': CODE_VERSION,
             'timestamp': datetime.now().isoformat(),
-            'type': 'Bragg_Diffraction_1D'
+            'type': 'Bragg_Diffraction_TMM',
+            'method': 'Transfer_Matrix_Method'
         },
         'parameters': {
-            'lattice_constant': float(LATTICE_CONSTANT),
+            'lattice_constant_nm': float(LATTICE_CONSTANT),
             'num_periods': int(NUM_PERIODS),
-            'wavelength_range': [float(WAVELENGTH_MIN), float(WAVELENGTH_MAX)]
+            'refractive_indices': {'n1': float(N1), 'n2': float(N2)},
+            'wavelength_range_nm': [float(WAVELENGTH_MIN), float(WAVELENGTH_MAX)]
         },
         'results': {
-            'theoretical_bragg_wavelength': theoretical_bragg,
-            'measured_bragg_wavelength': measured_bragg,
+            'theoretical_bragg_wavelength_nm': theoretical_bragg,
+            'measured_bragg_wavelength_nm': measured_bragg,
             'max_reflectivity': float(_to_py(max_r_result['reflectivity'])),
             'error_percent': error_percent,
-            'validation_passed': bool(error_percent < 10.0)
+            'validation_passed': bool(error_percent < 5.0)
         },
         'all_measurements': cleaned_results
     }
@@ -353,15 +393,15 @@ def generate_summary_report(results, save_path):
 
     print("Summary report saved.")
     print("\nRESULTS:")
-    print(f"  Theoretical Bragg wavelength: {theoretical_bragg:.2f}")
-    print(f"  Measured Bragg wavelength: {measured_bragg:.2f}")
+    print(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f} nm")
+    print(f"  Measured λ_Bragg: {measured_bragg:.2f} nm")
     print(f"  Error: {error_percent:.2f}%")
-    print(f"  Validation: {'PASSED' if error_percent < 10 else 'FAILED'}")
+    print(f"  Validation: {'PASSED ✓' if error_percent < 5 else 'FAILED ✗'}")
 
 def main():
     """Main execution function."""
     print("=" * 70)
-    print("BRAGG DIFFRACTION 1D SIMULATION")
+    print("BRAGG DIFFRACTION 1D SIMULATION (TRANSFER MATRIX METHOD)")
     print("=" * 70)
     
     # Setup environment
