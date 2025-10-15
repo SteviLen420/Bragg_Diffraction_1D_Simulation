@@ -258,7 +258,7 @@ If you use this code in your research, please cite:
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) file.
+MIT License — see [LICENSE](./LICENSE) file.
 
 **Copyright © 2025 Stefan Len**
 
@@ -267,8 +267,8 @@ MIT License — see [LICENSE](LICENSE) file.
 ## Contact
 
 **Author:** Stefan Len  
-**Email:** your.email@example.com  
-**GitHub:** [@yourusername](https://github.com/yourusername)
+**Email:** tqe.simulation@gmail.com 
+**GitHub:** [@yourusername](https://github.com/SteviLen420)
 
 For questions, issues, or collaboration inquiries, please open an issue on GitHub or contact via email.
 
