@@ -297,60 +297,6 @@ def create_validation_plot(wavelengths, reflectivities, save_path):
     
     print("Validation plot saved.")
 
-def generate_summary_report(results, save_path):
-    """
-    Generate comprehensive summary report.
-    """
-    print("\n--- Generating Summary Report ---")
-    
-    # Find wavelength with maximum reflectivity
-    max_r_idx = np.argmax([r['reflectivity'] for r in results])
-    max_r_result = results[max_r_idx]
-    
-    # Theoretical Bragg wavelength (first order)
-    theoretical_bragg = 2 * LATTICE_CONSTANT
-    
-    # Calculate error
-    measured_bragg = max_r_result['wavelength']
-    error_percent = abs(measured_bragg - theoretical_bragg) / theoretical_bragg * 100
-    
-    # Write text summary
-    with open(os.path.join(save_path, 'summary_report.txt'), 'w') as f:
-        f.write("=" * 70 + "\n")
-        f.write("BRAGG DIFFRACTION SIMULATION - SUMMARY REPORT\n")
-        f.write("=" * 70 + "\n\n")
-        
-        f.write("SIMULATION PARAMETERS:\n")
-        f.write(f"  Lattice constant (d): {LATTICE_CONSTANT}\n")
-        f.write(f"  Number of periods: {NUM_PERIODS}\n")
-        f.write(f"  Wavelength range: {WAVELENGTH_MIN} - {WAVELENGTH_MAX}\n")
-        f.write(f"  Grid size: {GRID_SIZE} points\n\n")
-        
-        f.write("ANALYTICAL PREDICTION:\n")
-        f.write(f"  Bragg law: n*λ = 2*d*sin(θ)\n")
-        f.write(f"  Normal incidence: θ = 90°, sin(θ) = 1\n")
-        f.write(f"  First order (n=1): λ_Bragg = 2*d = {theoretical_bragg:.2f}\n\n")
-        
-        f.write("NUMERICAL RESULTS:\n")
-        f.write(f"  Maximum reflectivity: {max_r_result['reflectivity']:.4f}\n")
-        f.write(f"  At wavelength: {measured_bragg:.2f}\n")
-        f.write(f"  Normalized (λ/2d): {max_r_result['normalized_wavelength']:.4f}\n\n")
-        
-        f.write("VALIDATION:\n")
-        f.write(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f}\n")
-        f.write(f"  Measured λ_Bragg: {measured_bragg:.2f}\n")
-        f.write(f"  Absolute error: {abs(measured_bragg - theoretical_bragg):.2f}\n")
-        f.write(f"  Relative error: {error_percent:.2f}%\n\n")
-        
-        if error_percent < 5:
-            f.write("✓ VALIDATION PASSED: Error < 5%\n")
-        elif error_percent < 10:
-            f.write("~ VALIDATION ACCEPTABLE: Error < 10%\n")
-        else:
-            f.write("✗ VALIDATION FAILED: Error > 10%\n")
-        
-        f.write("\n" + "=" * 70 + "\n")
-    
 def _to_py(x):
     import numpy as np
     if isinstance(x, np.generic):
@@ -358,24 +304,48 @@ def _to_py(x):
     return x
 
 def generate_summary_report(results, save_path):
-    ...
-    max_r_idx = int(np.argmax([_to_py(r['reflectivity']) for r in results]))
+    print("\n--- Generating Summary Report ---")
+    max_r_idx = int(np.argmax([float(_to_py(r['reflectivity'])) for r in results]))
     max_r_result = results[max_r_idx]
 
     theoretical_bragg = float(2 * LATTICE_CONSTANT)
     measured_bragg = float(_to_py(max_r_result['wavelength']))
     error_percent = float(abs(measured_bragg - theoretical_bragg) / theoretical_bragg * 100.0)
 
-    # normalizáltítsd a results elemeit is
-    cleaned_results = []
-    for r in results:
-        cleaned_results.append({
-            'wavelength': float(_to_py(r['wavelength'])),
-            'reflectivity': float(_to_py(r['reflectivity'])),
-            'transmissivity': float(_to_py(r['transmissivity'])),
-            'bragg_prediction': r['bragg_prediction'],
-            'normalized_wavelength': float(_to_py(r['normalized_wavelength'])),
-        })
+    with open(os.path.join(save_path, 'summary_report.txt'), 'w') as f:
+        f.write("=" * 70 + "\n")
+        f.write("BRAGG DIFFRACTION SIMULATION - SUMMARY REPORT\n")
+        f.write("=" * 70 + "\n\n")
+        f.write("SIMULATION PARAMETERS:\n")
+        f.write(f"  Lattice constant (d): {LATTICE_CONSTANT}\n")
+        f.write(f"  Number of periods: {NUM_PERIODS}\n")
+        f.write(f"  Wavelength range: {WAVELENGTH_MIN} - {WAVELENGTH_MAX}\n")
+        f.write(f"  Grid size: {GRID_SIZE} points\n\n")
+        f.write("ANALYTICAL PREDICTION:\n")
+        f.write(f"  Bragg law: n*λ = 2*d*sin(θ)\n")
+        f.write(f"  Normal incidence: θ = 90°, sin(θ) = 1\n")
+        f.write(f"  First order (n=1): λ_Bragg = 2*d = {theoretical_bragg:.2f}\n\n")
+        f.write("NUMERICAL RESULTS:\n")
+        f.write(f"  Maximum reflectivity: {float(_to_py(max_r_result['reflectivity'])):.4f}\n")
+        f.write(f"  At wavelength: {measured_bragg:.2f}\n")
+        f.write(f"  Normalized (λ/2d): {float(_to_py(max_r_result['normalized_wavelength'])):.4f}\n\n")
+        f.write("VALIDATION:\n")
+        f.write(f"  Theoretical λ_Bragg: {theoretical_bragg:.2f}\n")
+        f.write(f"  Measured λ_Bragg: {measured_bragg:.2f}\n")
+        f.write(f"  Absolute error: {abs(measured_bragg - theoretical_bragg):.2f}\n")
+        f.write(f"  Relative error: {error_percent:.2f}%\n\n")
+        f.write("✓ VALIDATION PASSED: Error < 5%\n" if error_percent < 5
+                else "~ VALIDATION ACCEPTABLE: Error < 10%\n" if error_percent < 10
+                else "✗ VALIDATION FAILED: Error > 10%\n")
+        f.write("\n" + "=" * 70 + "\n")
+
+    cleaned_results = [{
+        'wavelength': float(_to_py(r['wavelength'])),
+        'reflectivity': float(_to_py(r['reflectivity'])),
+        'transmissivity': float(_to_py(r['transmissivity'])),
+        'bragg_prediction': str(r['bragg_prediction']),
+        'normalized_wavelength': float(_to_py(r['normalized_wavelength'])),
+    } for r in results]
 
     summary_json = {
         'simulation_info': {
