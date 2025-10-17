@@ -1,6 +1,3 @@
-
-
-
 # Numerical Validation of Bragg Diffraction in One-Dimensional Photonic Crystals using Transfer Matrix Method
 
 **Stefan Len**
@@ -13,7 +10,7 @@
 
 ## Abstract
 
-We present a rigorous numerical implementation of the Transfer Matrix Method (TMM) for simulating electromagnetic wave propagation in one-dimensional periodic dielectric structures. The simulation validates the analytical Bragg diffraction condition for normal incidence through quantitative comparison with theoretical predictions. Using a representative SiO₂/TiO₂ multilayer stack with 30 periods and lattice constant d = 120 nm, we achieve excellent agreement between numerical and analytical results, with a relative error of 0.040% in the Bragg wavelength determination. Energy conservation is verified to machine precision (|A| < 10⁻¹⁴), confirming the numerical stability of our implementation. The computed reflectivity spectrum exhibits the characteristic photonic bandgap with R > 99.99% at the Bragg wavelength λ_B = 451.02 nm, along with expected Fabry-Pérot oscillations outside the stop band. This work provides a validated computational framework for designing distributed Bragg reflectors (DBRs) used in vertical-cavity surface-emitting lasers (VCSELs) and optical filter applications.
+I present a rigorous numerical implementation of the Transfer Matrix Method (TMM) for simulating electromagnetic wave propagation in one-dimensional periodic dielectric structures. The simulation validates the analytical Bragg diffraction condition for normal incidence through quantitative comparison with theoretical predictions. Using a representative SiO₂/TiO₂ multilayer stack with 30 periods and lattice constant d = 120 nm, I achieve excellent agreement between numerical and analytical results, with a relative error of 0.040% in the Bragg wavelength determination. Energy conservation is verified to machine precision (|A| < 10⁻¹⁴), confirming the numerical stability of my implementation. The computed reflectivity spectrum exhibits the characteristic photonic bandgap with R > 99.99% at the Bragg wavelength λ_B = 451.02 nm, along with expected Fabry-Pérot oscillations outside the stop band. This work provides a validated computational framework for designing distributed Bragg reflectors (DBRs) used in vertical-cavity surface-emitting lasers (VCSELs) and optical filter applications.
 
 **Keywords:** Bragg diffraction, Transfer Matrix Method, photonic crystals, distributed Bragg reflector, numerical simulation, VCSEL
 
@@ -119,17 +116,17 @@ For lossless dielectric media with real refractive indices, energy conservation 
 
 $$R + T = 1$$
 
-Any deviation from unity indicates numerical errors or unphysical absorption. We define the absorption/error parameter:
+Any deviation from unity indicates numerical errors or unphysical absorption. I define the absorption/error parameter:
 
 $$A = 1 - (R + T)$$
 
-For a numerically stable implementation, we require |A| < 10⁻¹⁰ across the entire spectral range.
+For a numerically stable implementation, I require |A| < 10⁻¹⁰ across the entire spectral range.
 
 ### 2.4 Numerical Implementation
 
 #### 2.4.1 Wavelength Scan
 
-We compute R(λ) and T(λ) by scanning wavelength from λ_min to λ_max with N_λ points. At each wavelength:
+I compute R(λ) and T(λ) by scanning wavelength from λ_min to λ_max with N_λ points. At each wavelength:
 
 1. Compute phase shifts φ₁(λ) and φ₂(λ)
 2. Construct unit cell matrix M_cell(λ)
@@ -139,7 +136,7 @@ We compute R(λ) and T(λ) by scanning wavelength from λ_min to λ_max with N_�
 
 #### 2.4.2 Peak Wavelength Determination
 
-To achieve sub-grid accuracy in determining λ_B, we employ quadratic interpolation around the reflectivity maximum. Given three points (λ_i, R_i) near the peak, we fit a parabola:
+To achieve sub-grid accuracy in determining λ_B, I employ quadratic interpolation around the reflectivity maximum. Given three points (λ_i, R_i) near the peak, I fit a parabola:
 
 $$R(\lambda) = a\lambda^2 + b\lambda + c$$
 
@@ -155,7 +152,7 @@ This technique typically improves accuracy by an order of magnitude compared to 
 
 ### 3.1 Material Selection
 
-We simulate a SiO₂/TiO₂ multilayer stack, a common material combination for visible-wavelength DBRs:
+I simulate a SiO₂/TiO₂ multilayer stack, a common material combination for visible-wavelength DBRs:
 
 - **Layer 1:** Silicon dioxide (SiO₂), n₁ = 1.46
 - **Layer 2:** Titanium dioxide (TiO₂), n₂ = 2.30
@@ -181,7 +178,7 @@ $$n_{\text{eff}} = \frac{n_1 + n_2}{2} = \frac{1.46 + 2.30}{2} = 1.88$$
 
 ### 3.3 Analytical Prediction
 
-From the Bragg condition, we predict first-order maximum reflectivity at:
+From the Bragg condition, I predict first-order maximum reflectivity at:
 
 $$\lambda_B = 2n_{\text{eff}}d = 2 \times 1.88 \times 120\,\text{nm} = 451.2\,\text{nm}$$
 
@@ -247,7 +244,7 @@ Figure 3 presents the validation analysis by plotting reflectivity against the n
 
 #### 4.3.1 Primary Bragg Peak
 
-The dominant reflectivity maximum occurs precisely at λ/λ_B = 0.9996, corresponding to λ = 451.02 nm. The extremely close alignment with the theoretical prediction (λ/λ_B = 1.0, marked by the red dashed line) validates our numerical implementation.
+The dominant reflectivity maximum occurs precisely at λ/λ_B = 0.9996, corresponding to λ = 451.02 nm. The extremely close alignment with the theoretical prediction (λ/λ_B = 1.0, marked by the red dashed line) validates my numerical implementation.
 
 #### 4.3.2 Higher-Order Bragg Peaks
 
@@ -279,7 +276,7 @@ The exceptional agreement (0.040% error in λ_B) validates both the physical mod
 
 ### 4.5 Energy Conservation Verification
 
-A critical test of numerical accuracy is verification of energy conservation. For all 50 wavelength points, we compute:
+A critical test of numerical accuracy is verification of energy conservation. For all 50 wavelength points, I compute:
 
 $$A(\lambda) = 1 - [R(\lambda) + T(\lambda)]$$
 
@@ -289,11 +286,11 @@ Figure 4 (not shown) plots |A(λ)| across the spectral range. Key findings:
 - Mean deviation: ⟨|A|⟩ = 5.2 × 10⁻¹⁵
 - All points satisfy: |A| < 10⁻¹³
 
-These values are at the level of machine precision for double-precision floating-point arithmetic (ε ≈ 2.2 × 10⁻¹⁶), confirming the numerical stability of our TMM implementation. No unphysical absorption or numerical artifacts are present.
+These values are at the level of machine precision for double-precision floating-point arithmetic (ε ≈ 2.2 × 10⁻¹⁶), confirming the numerical stability of my TMM implementation. No unphysical absorption or numerical artifacts are present.
 
 ### 4.6 Sub-Grid Accuracy via Interpolation
 
-The discrete wavelength sampling (Δλ ≈ 10.2 nm) could introduce error in determining the exact peak position. However, by employing quadratic interpolation around the maximum, we achieve sub-grid accuracy:
+The discrete wavelength sampling (Δλ ≈ 10.2 nm) could introduce error in determining the exact peak position. However, by employing quadratic interpolation around the maximum, I achieve sub-grid accuracy:
 
 - Grid resolution: Δλ = 10.2 nm
 - Peak position uncertainty (without interpolation): ±5 nm
@@ -313,29 +310,29 @@ The photonic bandgap width (Δλ ≈ 50 nm) is determined primarily by the refra
 
 ### 5.2 Comparison with Infinite Stack Theory
 
-For an infinite periodic structure (N → ∞), the Bragg condition predicts complete reflection (R = 1) at λ_B with zero bandwidth. Our finite stack exhibits:
+For an infinite periodic structure (N → ∞), the Bragg condition predicts complete reflection (R = 1) at λ_B with zero bandwidth. My finite stack exhibits:
 
 1. Slightly broadened stop band (~50 nm vs. δ-function)
 2. Fabry-Pérot oscillations outside the gap
 3. Non-zero transmission at band edges
 
-These deviations are characteristic of finite-size effects and diminish as N increases. With 30 periods, we are in the regime where the structure behaves nearly as an ideal Bragg reflector within the stop band, but finite-size effects are visible outside it.
+These deviations are characteristic of finite-size effects and diminish as N increases. With 30 periods, I am in the regime where the structure behaves nearly as an ideal Bragg reflector within the stop band, but finite-size effects are visible outside it.
 
 ### 5.3 Role of Quarter-Wave Layers
 
-Our design uses equal-thickness layers (d₁ = d₂ = 60 nm), which approximates a quarter-wave stack at the design wavelength. For a true quarter-wave stack, each layer would have optical thickness nᵢdᵢ = λ_B/4:
+My design uses equal-thickness layers (d₁ = d₂ = 60 nm), which approximates a quarter-wave stack at the design wavelength. For a true quarter-wave stack, each layer would have optical thickness nᵢdᵢ = λ_B/4:
 
 - Layer 1: d₁ = λ_B/(4n₁) = 451.2/(4×1.46) ≈ 77.2 nm
 - Layer 2: d₂ = λ_B/(4n₂) = 451.2/(4×2.30) ≈ 49.0 nm
 
-Our equal-thickness design (d₁ = d₂ = 60 nm) is a compromise that simplifies fabrication while still achieving high reflectivity. The slight deviation from quarter-wave condition causes a small (~10%) reduction in maximum reflectivity and slight asymmetry in the stop band, but these effects are negligible for most applications.
+My equal-thickness design (d₁ = d₂ = 60 nm) is a compromise that simplifies fabrication while still achieving high reflectivity. The slight deviation from quarter-wave condition causes a small (~10%) reduction in maximum reflectivity and slight asymmetry in the stop band, but these effects are negligible for most applications.
 
 ### 5.4 Practical Implications for DBR Design
 
 The validated simulation framework enables optimization of DBR structures for specific applications:
 
 #### VCSEL Mirrors
-For 850 nm VCSELs (common in optical data links), our results suggest:
+For 850 nm VCSELs (common in optical data links), my results suggest:
 - Required period: d ≈ 226 nm
 - 25–30 periods sufficient for R > 99.9%
 - AlGaAs/GaAs material system (Δn ≈ 0.5) requires ~40 periods for equivalent reflectivity
@@ -354,7 +351,7 @@ For wide stop bands:
 
 ### 5.5 Numerical Accuracy and Limitations
 
-Our implementation achieves 0.040% error in λ_B determination, limited primarily by:
+My implementation achieves 0.040% error in λ_B determination, limited primarily by:
 
 1. **Wavelength sampling**: Δλ = 10.2 nm discrete grid
    - Mitigated by quadratic interpolation
@@ -362,7 +359,7 @@ Our implementation achieves 0.040% error in λ_B determination, limited primaril
 
 2. **Effective index approximation**: n_eff = (n₁+n₂)/2
    - More accurate: use weighted average by optical path
-   - Effect: <0.1% for our parameters
+   - Effect: <0.1% for my parameters
 
 3. **Normal incidence assumption**: θ = 0°
    - Angular dependence: λ_B(θ) = λ_B(0)√(1 - sin²θ/n²_eff)
@@ -387,7 +384,7 @@ Potential extensions of this work include:
 
 ## 6. Conclusions
 
-We have presented a comprehensive numerical study of Bragg diffraction in one-dimensional photonic crystals using the Transfer Matrix Method. The key findings are:
+I have presented a comprehensive numerical study of Bragg diffraction in one-dimensional photonic crystals using the Transfer Matrix Method. The key findings are:
 
 1. **Excellent validation**: The numerical simulation reproduces the analytical Bragg wavelength with 0.040% error, demonstrating the accuracy of the TMM implementation.
 
