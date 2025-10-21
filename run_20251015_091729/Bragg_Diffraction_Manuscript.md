@@ -225,7 +225,7 @@ Figure 1 shows the one-dimensional refractive index profile n(z) of the simulate
 
 ### 4.2 Reflectivity and Transmissivity Spectra
 
-![Reflectivity and Transmissivity](figs/bragg_reflectivity.png)
+![Reflectivity and Transmissivity](figs/reflectivity_spectrum.png)
 
 **Figure 2:** (Top) Reflectivity spectrum showing the photonic bandgap centered at λ_B = 451.2 nm. The blue curve represents TMM numerical results; the red dashed line indicates the analytical Bragg wavelength prediction. (Bottom) Corresponding transmissivity spectrum demonstrating complementary behavior (R + T = 1).
 
@@ -255,7 +255,7 @@ The transmissivity spectrum (Figure 2, bottom) is perfectly complementary to the
 
 ### 4.3 Validation Against Analytical Theory
 
-![Validation](figs/bragg_validation.png)
+![Validation](figs/validation_plot.png)
 
 **Figure 3:** Validation of numerical simulation against analytical Bragg law. Reflectivity plotted versus normalized wavelength λ/λ_B. The red dashed line marks the first-order Bragg condition (λ/λ_B = 1), and the pink shaded region indicates ±5% tolerance. TMM results (blue) show excellent agreement with theory.
 
