@@ -67,9 +67,8 @@
 
 \begin{document}
 
-\section{Numerical Validation of Bragg Diffraction in One-Dimensional
-Photonic Crystals using Transfer Matrix
-Method}\label{numerical-validation-of-bragg-diffraction-in-one-dimensional-photonic-crystals-using-transfer-matrix-method}
+
+\section{Numerical Validation of Bragg Diffraction in One-Dimensional Photonic Crystals using Transfer Matrix Method}\label{numerical-validation-of-bragg-diffraction-in-one-dimensional-photonic-crystals-using-transfer-matrix-method}
 
 \textbf{Stefan Len}
 
@@ -81,27 +80,9 @@ Method}\label{numerical-validation-of-bragg-diffraction-in-one-dimensional-photo
 
 \subsection{Abstract}\label{abstract}
 
-I present a rigorous numerical implementation of the Transfer Matrix
-Method (TMM) for simulating electromagnetic wave propagation in
-one-dimensional periodic dielectric structures. The simulation validates
-the Bragg diffraction condition for normal incidence through
-quantitative comparison with theoretical predictions. Using a
-representative SiO$_2$/TiO$_2$ multilayer stack with 30 periods, equal
-physical layer thicknesses of 60 nm, and total period d = 120 nm, I
-achieve excellent agreement between numerical and analytical results,
-with a relative error of 0.040\% in the Bragg wavelength determination.
-Energy conservation is verified to machine precision
-($|A| < 10^{-14}$), confirming the numerical
-stability of my implementation. The computed reflectivity spectrum
-exhibits the characteristic photonic bandgap with R \textgreater{}
-99.99\% at the Bragg wavelength $\lambda_B = 451.02 nm, along with Fabry-Pérot
-oscillations outside the stop band. This work provides a validated
-computational framework for designing distributed Bragg reflectors
-(DBRs) used in vertical-cavity surface-emitting lasers (VCSELs) and
-optical filter applications.
+I present a rigorous numerical implementation of the Transfer Matrix Method (TMM) for simulating electromagnetic wave propagation in one-dimensional periodic dielectric structures. The simulation validates the Bragg diffraction condition for normal incidence through quantitative comparison with theoretical predictions. Using a representative SiO$_2$/TiO$_2$ multilayer stack with 30 periods, equal physical layer thicknesses of 60 nm, and total period d = 120 nm, I achieve excellent agreement between numerical and analytical results, with a relative error of 0.040\% in the Bragg wavelength determination. Energy conservation is verified to machine precision ($|A| < 10^{-14}$), confirming the numerical stability of my implementation. The computed reflectivity spectrum exhibits the characteristic photonic bandgap with R \textgreater{} 99.99\% at the Bragg wavelength $\lambda_B = 451.02$ nm, along with Fabry-Pérot oscillations outside the stop band. This work provides a validated computational framework for designing distributed Bragg reflectors (DBRs) used in vertical-cavity surface-emitting lasers (VCSELs) and optical filter applications.
 
-\textbf{Keywords:} Bragg diffraction, Transfer Matrix Method, photonic
-crystals, distributed Bragg reflector, numerical simulation, VCSEL
+\textbf{Keywords:} Bragg diffraction, Transfer Matrix Method, photonic crystals, distributed Bragg reflector, numerical simulation, VCSEL
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -109,37 +90,21 @@ crystals, distributed Bragg reflector, numerical simulation, VCSEL
 
 \subsubsection{1.1 Physical Motivation}\label{physical-motivation}
 
-One-dimensional photonic crystals, consisting of alternating layers of
-dielectric materials with different refractive indices, exhibit unique
-optical properties that have enabled transformative technologies in
-optoelectronics. When the periodicity of such structures approaches the
-wavelength of light, constructive interference of reflected waves leads
-to the formation of a photonic bandgap---a range of wavelengths for
-which propagation through the structure is forbidden {[}1,2{]}. This
-phenomenon, known as Bragg diffraction, is the fundamental principle
-behind distributed Bragg reflectors (DBRs), which serve as
-high-reflectivity mirrors in vertical-cavity surface-emitting lasers
-(VCSELs) {[}3{]}, narrow-band optical filters {[}4{]}, and other
-photonic devices.
+One-dimensional photonic crystals, consisting of alternating layers of dielectric materials with different refractive indices, exhibit unique optical properties that have enabled transformative technologies in optoelectronics. When the periodicity of such structures approaches the wavelength of light, constructive interference of reflected waves leads to the formation of a photonic bandgap---a range of wavelengths for which propagation through the structure is forbidden {[}1,2{]}. This phenomenon, known as Bragg diffraction, is the fundamental principle behind distributed Bragg reflectors (DBRs), which serve as high-reflectivity mirrors in vertical-cavity surface-emitting lasers (VCSELs) {[}3{]}, narrow-band optical filters {[}4{]}, and other photonic devices.
 
 \subsubsection{1.2 Theoretical Background}\label{theoretical-background}
 
-For a periodic multilayer stack with alternating layers of optical
-thickness $n_1 d_1$ and $n_2 d_2$, the Bragg condition for constructive
-interference at normal incidence is:
+For a periodic multilayer stack with alternating layers of optical thickness $n_1 d_1$ and $n_2 d_2$, the Bragg condition for constructive interference at normal incidence is:
 
 \[m\lambda = 2(n_1 d_1 + n_2 d_2)\]
 
-where m is the diffraction order (m = 1, 2, 3, \ldots) and $\lambda$ is the
-vacuum wavelength.
+where m is the diffraction order (m = 1, 2, 3, \ldots) and $\lambda$ is the vacuum wavelength.
 
-For the specific case of \textbf{equal physical thickness} ($d_1 = d_2$ =
-d/2), where d is the period, this simplifies to:
+For the specific case of \textbf{equal physical thickness} ($d_1 = d_2$ = d/2), where d is the period, this simplifies to:
 
 \[m\lambda = d(n_1 + n_2)\]
 
-For first-order diffraction (m = 1), we can define an effective
-refractive index:
+For first-order diffraction (m = 1), we can define an effective refractive index:
 
 \[n_{\text{eff}} = \frac{n_1 + n_2}{2}\]
 
@@ -147,21 +112,11 @@ which yields the familiar Bragg wavelength expression:
 
 \[\lambda_B = 2n_{\text{eff}}d\]
 
-\textbf{Important note}: This n\_eff definition (arithmetic mean)
-applies specifically to structures with equal physical thicknesses ($d_1 = d_2$). For quarter-wave stack designs where the optical thicknesses are
-equal ($n_1 d_1 = n_2 d_2$ = $\lambda_B/4$), the appropriate effective index is the
-geometric mean: n\_eff = $\sqrt{n_1 \cdot n_2}$. These represent two distinct design
-philosophies with different optimization criteria.
+\textbf{Important note}: This n\_eff definition (arithmetic mean) applies specifically to structures with equal physical thicknesses ($d_1 = d_2$). For quarter-wave stack designs where the optical thicknesses are equal ($n_1 d_1 = n_2 d_2 = \lambda_B/4$), the appropriate effective index is the geometric mean: $n_{\text{eff}} = \sqrt{n_1 \cdot n_2}$. These represent two distinct design philosophies with different optimization criteria.
 
 \subsubsection{1.3 Computational Approach}\label{computational-approach}
 
-The Transfer Matrix Method (TMM) is a powerful analytical tool for
-computing the optical response of stratified media {[}5,6{]}. By
-representing the electromagnetic field propagation through each layer
-and interface as matrix operations, the TMM enables exact computation of
-reflection and transmission coefficients for multilayer structures. This
-method is particularly well-suited for Bragg reflectors, as it naturally
-accounts for multiple internal reflections and interference effects.
+The Transfer Matrix Method (TMM) is a powerful analytical tool for computing the optical response of stratified media {[}5,6{]}. By representing the electromagnetic field propagation through each layer and interface as matrix operations, the TMM enables exact computation of reflection and transmission coefficients for multilayer structures. This method is particularly well-suited for Bragg reflectors, as it naturally accounts for multiple internal reflections and interference effects.
 
 \subsubsection{1.4 Objectives}\label{objectives}
 
@@ -170,16 +125,13 @@ The primary objectives of this work are:
 \begin{itemize}
 \tightlist
 \item
-  To implement a numerically stable TMM algorithm with proper boundary
-  conditions
+  To implement a numerically stable TMM algorithm with proper boundary conditions
 \item
-  To validate the numerical implementation against analytical Bragg law
-  predictions for equal-thickness designs
+  To validate the numerical implementation against analytical Bragg law predictions for equal-thickness designs
 \item
   To verify energy conservation in the lossless limit
 \item
-  To characterize the photonic bandgap structure of a representative DBR
-  system
+  To characterize the photonic bandgap structure of a representative DBR system
 \item
   To provide a reproducible computational framework for DBR design
 \end{itemize}
@@ -188,14 +140,9 @@ The primary objectives of this work are:
 
 \subsection{2. Theory and Method}\label{theory-and-method}
 
-\subsubsection{2.1 Transfer Matrix
-Formulation}\label{transfer-matrix-formulation}
+\subsubsection{2.1 Transfer Matrix Formulation}\label{transfer-matrix-formulation}
 
-For \textbf{normal incidence ($\theta$ = 0°)}, the TE and TM polarizations are
-degenerate, and the following formulation applies to both. The
-electromagnetic field in a stratified medium can be represented by
-forward and backward propagating waves. At any position, the field
-amplitudes are related by:
+For \textbf{normal incidence ($\theta$ = 0°)}, the TE and TM polarizations are degenerate, and the following formulation applies to both. The electromagnetic field in a stratified medium can be represented by forward and backward propagating waves. At any position, the field amplitudes are related by:
 
 \[(E^+) = M \begin{pmatrix} E_0^+ \\ E_0^- \end{pmatrix}\]
 
@@ -203,9 +150,7 @@ where M is the transfer matrix connecting the input and output fields.
 
 \paragraph{2.1.1 Interface Matrix}\label{interface-matrix}
 
-When light encounters an interface between media with refractive indices
-n\_a and n\_b, the transfer matrix accounting for Fresnel reflection and
-transmission is:
+When light encounters an interface between media with refractive indices n\_a and n\_b, the transfer matrix accounting for Fresnel reflection and transmission is:
 
 \[I_{ab} = \frac{1}{t_{ab}}\begin{pmatrix} 1 & r_{ab} \\ r_{ab} & 1 \end{pmatrix}\]
 
@@ -221,8 +166,7 @@ This matrix ensures proper field continuity at the interface.
 
 \paragraph{2.1.2 Propagation Matrix}\label{propagation-matrix}
 
-Propagation through a homogeneous layer of thickness d with refractive
-index n introduces a phase shift:
+Propagation through a homogeneous layer of thickness d with refractive index n introduces a phase shift:
 
 \[\phi = \frac{2\pi nd}{\lambda}\]
 
@@ -232,8 +176,7 @@ The propagation matrix is:
 
 \paragraph{2.1.3 Unit Cell Matrix}\label{unit-cell-matrix}
 
-For a periodic structure with two layers per unit cell, the transfer
-matrix for one complete period is:
+For a periodic structure with two layers per unit cell, the transfer matrix for one complete period is:
 
 \[M_{\text{cell}} = P(\phi_1) \cdot I_{12} \cdot P(\phi_2) \cdot I_{21}\]
 
@@ -245,69 +188,56 @@ For N periods, the total transfer matrix is:
 
 \[M_{\text{total}} = I_{\text{in}\to 1} \cdot [M_{\text{cell}}]^N \cdot I_{N\to\text{out}}\]
 
-where the entrance and exit interface matrices account for the
-surrounding medium (typically air).
+where the entrance and exit interface matrices account for the surrounding medium (typically air).
 
-\subsubsection{2.2 Reflection and Transmission
-Coefficients}\label{reflection-and-transmission-coefficients}
+\subsubsection{2.2 Reflection and Transmission Coefficients}\label{reflection-and-transmission-coefficients}
 
-The complex reflection and transmission amplitudes are obtained from the
-total matrix elements:
+The complex reflection and transmission amplitudes are obtained from the total matrix elements:
 
 \[r = \frac{M_{10}}{M_{00}}, \quad t = \frac{1}{M_{00}}\]
 
-The power reflectivity R and transmissivity T, accounting for energy
-flux through interfaces, are:
+The power reflectivity R and transmissivity T, accounting for energy flux through interfaces, are:
 
 \[R = |r|^2, \quad T = \frac{n_{\text{out}}}{n_{\text{in}}}|t|^2\]
 
-The factor n\_out/n\_in ensures proper energy flux normalization when
-the refractive indices of input and output media differ.
+The factor n\_out/n\_in ensures proper energy flux normalization when the refractive indices of input and output media differ.
 
 \subsubsection{2.3 Energy Conservation}\label{energy-conservation}
 
-For lossless dielectric media with real refractive indices, energy
-conservation requires:
+For lossless dielectric media with real refractive indices, energy conservation requires:
 
 \[R + T = 1\]
 
-Any deviation from unity indicates numerical errors or unphysical
-absorption. I define the absorption/error parameter:
+Any deviation from unity indicates numerical errors or unphysical absorption. I define the absorption/error parameter:
 
 \[A = 1 - (R + T)\]
 
-For a numerically stable implementation, I require \textbar A\textbar{}
-$< 10^{-10}$ across the entire spectral range.
+For a numerically stable implementation, I require $|A| < 10^{-10}$ across the entire spectral range.
 
-\subsubsection{2.4 Numerical
-Implementation}\label{numerical-implementation}
+\subsubsection{2.4 Numerical Implementation}\label{numerical-implementation}
 
 \paragraph{2.4.1 Wavelength Scan}\label{wavelength-scan}
 
-I compute R($\lambda$) and T($\lambda$) by scanning wavelength from $\lambda_{\text{min}}$ to $\lambda_{\text{max}}$
-with N\_$\lambda$ points. At each wavelength:
+I compute R($\lambda$) and T($\lambda$) by scanning wavelength from $\lambda_{\text{min}}$ to $\lambda_{\text{max}}$ with $N_\lambda$ points. At each wavelength:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Compute phase shifts $\phi_1$($\lambda$) and $\phi_2$($\lambda$)
+  Compute phase shifts $\phi_1(\lambda)$ and $\phi_2(\lambda)$
 \item
-  Construct unit cell matrix M\_cell($\lambda$)
+  Construct unit cell matrix $M_{\text{cell}}(\lambda)$
 \item
-  Compute M\_total($\lambda$) = I\_in$\to$1 $\cdot$ {[}M\_cell($\lambda$){]}\^{}N $\cdot$ I\_N$\to$out
+  Compute $M_{\text{total}}(\lambda) = I_{\text{in}\to 1} \cdot [M_{\text{cell}}(\lambda)]^N \cdot I_{N\to\text{out}}$
 \item
-  Extract r($\lambda$) and t($\lambda$) from matrix elements
+  Extract $r(\lambda)$ and $t(\lambda)$ from matrix elements
 \item
   Calculate R($\lambda$), T($\lambda$), and verify A($\lambda$) $\approx$ 0
 \end{enumerate}
 
-\paragraph{2.4.2 Peak Wavelength
-Determination}\label{peak-wavelength-determination}
+\paragraph{2.4.2 Peak Wavelength Determination}\label{peak-wavelength-determination}
 
-To achieve sub-grid accuracy in determining $\lambda_B$, I employ quadratic
-interpolation around the reflectivity maximum. Given three points ($\lambda$\_i,
-R\_i) near the peak, I fit a parabola:
+To achieve sub-grid accuracy in determining $\lambda_B$, I employ quadratic interpolation around the reflectivity maximum. Given three points ($\lambda_i$, $R_i$) near the peak, I fit a parabola:
 
 \[R(\lambda) = a\lambda^2 + b\lambda + c\]
 
@@ -315,8 +245,7 @@ and solve for the vertex position:
 
 \[\lambda_{\text{peak}} = -\frac{b}{2a}\]
 
-This technique typically improves accuracy by an order of magnitude
-compared to simple maximum finding.
+This technique typically improves accuracy by an order of magnitude compared to simple maximum finding.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -324,17 +253,14 @@ compared to simple maximum finding.
 
 \subsubsection{3.1 Material Selection}\label{material-selection}
 
-I simulate a SiO$_2$/TiO$_2$ multilayer stack, a common material combination
-for visible-wavelength DBRs:
+I simulate a SiO$_2$/TiO$_2$ multilayer stack, a common material combination for visible-wavelength DBRs:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Layer 1:} Silicon dioxide (SiO$_2$), $n_1 = 1.46$ (at
-  \textasciitilde450 nm)
+  \textbf{Layer 1:} Silicon dioxide (SiO$_2$), n$_1$ = 1.46 (at \textasciitilde450 nm)
 \item
-  \textbf{Layer 2:} Titanium dioxide (TiO$_2$), $n_2 = 2.30$ (at
-  \textasciitilde450 nm)
+  \textbf{Layer 2:} Titanium dioxide (TiO$_2$), n$_2$ = 2.30 (at \textasciitilde450 nm)
 \end{itemize}
 
 These materials offer:
@@ -342,7 +268,7 @@ These materials offer:
 \begin{itemize}
 \tightlist
 \item
-  Large refractive index contrast ($\Delta n$ = 0.84)
+  Large refractive index contrast ($\Delta$n = 0.84)
 \item
   Excellent optical transparency in the visible range
 \item
@@ -351,42 +277,33 @@ These materials offer:
   Thermal and chemical stability
 \end{itemize}
 
-\textbf{Note on dispersion:} Refractive indices exhibit wavelength
-dependence n($\lambda$), but we use constant values as a first approximation.
-For high-precision applications, wavelength-dependent Sellmeier
-equations should be incorporated.
+\textbf{Note on dispersion:} Refractive indices exhibit wavelength dependence n($\lambda$), but we use constant values as a first approximation. For high-precision applications, wavelength-dependent Sellmeier equations should be incorporated.
 
 \subsubsection{3.2 Geometric Parameters}\label{geometric-parameters}
 
-The structure consists of N = 30 periods with equal physical layer
-thicknesses:
+The structure consists of N = 30 periods with equal physical layer thicknesses:
 
 \begin{itemize}
 \tightlist
 \item
   \textbf{Period:} d = 120 nm
 \item
-  \textbf{Layer 1 thickness:} $d_1 = 60$ nm
+  \textbf{Layer 1 thickness:} d$_1$ = 60 nm
 \item
-  \textbf{Layer 2 thickness:} $d_2 = 60$ nm
+  \textbf{Layer 2 thickness:} d$_2$ = 60 nm
 \item
   \textbf{Total stack thickness:} L = N$\cdot$d = 3600 nm = 3.6 µm
 \end{itemize}
 
-This \textbf{equal-thickness design} ($d_1 = d_2$) simplifies fabrication
-and yields an effective refractive index:
+This \textbf{equal-thickness design} ($d_1 = d_2$) simplifies fabrication and yields an effective refractive index:
 
 \[n_{\text{eff}} = \frac{n_1 + n_2}{2} = \frac{1.46 + 2.30}{2} = 1.88\]
 
-\textbf{Note:} This arithmetic mean definition is valid specifically for
-equal physical thicknesses. A quarter-wave stack design ($n_1 d_1 = n_2 d_2$ =
-$\lambda_B/4$) would use the geometric mean n\_eff = $\sqrt{n_1 \cdot n_2}$ $\approx$ 1.832 instead,
-representing a different optimization approach.
+\textbf{Note:} This arithmetic mean definition is valid specifically for equal physical thicknesses. A quarter-wave stack design ($n_1 d_1 = n_2 d_2 = \lambda_B/4$) would use the geometric mean $n_{\text{eff}} = \sqrt{n_1 \cdot n_2} \approx 1.832$ instead, representing a different optimization approach.
 
 \subsubsection{3.3 Analytical Prediction}\label{analytical-prediction}
 
-From the Bragg condition for equal-thickness layers, I predict
-first-order maximum reflectivity at:
+From the Bragg condition for equal-thickness layers, I predict first-order maximum reflectivity at:
 
 \[\lambda_B = 2n_{\text{eff}}d = 2 \times 1.88 \times 120\,\text{nm} = 451.2\,\text{nm}\]
 
@@ -399,9 +316,9 @@ This wavelength lies in the blue region of the visible spectrum.
 \item
   \textbf{Wavelength range:} 400--900 nm
 \item
-  \textbf{Number of wavelength points:} N\_$\lambda$ = 50
+  \textbf{Number of wavelength points:} $N_\lambda = 50$
 \item
-  \textbf{Spectral resolution:} $\Delta$\lambda$ $\approx$ 10.2 nm
+  \textbf{Spectral resolution:} $\Delta\lambda \approx 10.2$ nm
 \item
   \textbf{Input/output medium:} Air (n\_in = n\_out = 1.0)
 \item
@@ -412,8 +329,7 @@ This wavelength lies in the blue region of the visible spectrum.
 
 \subsection{4. Results}\label{results}
 
-\subsubsection{4.1 Refractive Index
-Profile}\label{refractive-index-profile}
+\subsubsection{4.1 Refractive Index Profile}\label{refractive-index-profile}
 
 \begin{figure}
 \centering
@@ -421,19 +337,11 @@ Profile}\label{refractive-index-profile}
 \caption{Refractive Index Profile}
 \end{figure}
 
-\textbf{Figure 1:} Refractive index profile of the 30-period SiO$_2$/TiO$_2$
-multilayer stack. Blue regions (n = 1.46) represent SiO$_2$ layers, red
-regions (n = 2.30) represent TiO$_2$ layers. The periodic structure extends
-over 3600 nm with uniform 60 nm layer thicknesses.
+\textbf{Figure 1:} Refractive index profile of the 30-period SiO$_2$/TiO$_2$ multilayer stack. Blue regions (n = 1.46) represent SiO$_2$ layers, red regions (n = 2.30) represent TiO$_2$ layers. The periodic structure extends over 3600 nm with uniform 60 nm layer thicknesses.
 
-Figure 1 shows the one-dimensional refractive index profile n(z) of the
-simulated structure. The sharp discontinuities at each interface give
-rise to partial reflections that interfere constructively at the Bragg
-wavelength. The regularity and uniformity of the structure are critical
-for achieving high reflectivity over a narrow spectral range.
+Figure 1 shows the one-dimensional refractive index profile n(z) of the simulated structure. The sharp discontinuities at each interface give rise to partial reflections that interfere constructively at the Bragg wavelength. The regularity and uniformity of the structure are critical for achieving high reflectivity over a narrow spectral range.
 
-\subsubsection{4.2 Reflectivity and Transmissivity
-Spectra}\label{reflectivity-and-transmissivity-spectra}
+\subsubsection{4.2 Reflectivity and Transmissivity Spectra}\label{reflectivity-and-transmissivity-spectra}
 
 \begin{figure}
 \centering
@@ -441,67 +349,39 @@ Spectra}\label{reflectivity-and-transmissivity-spectra}
 \caption{Reflectivity and Transmissivity}
 \end{figure}
 
-\textbf{Figure 2:} (Top) Reflectivity spectrum showing the photonic
-bandgap centered at $\lambda_B = 451.2 nm. The blue curve represents TMM
-numerical results; the red dashed line indicates the analytical Bragg
-wavelength prediction. (Bottom) Corresponding transmissivity spectrum
-demonstrating complementary behavior (R + T = 1).
+\textbf{Figure 2:} (Top) Reflectivity spectrum showing the photonic bandgap centered at $\lambda_B = 451.2$ nm. The blue curve represents TMM numerical results; the red dashed line indicates the analytical Bragg wavelength prediction. (Bottom) Corresponding transmissivity spectrum demonstrating complementary behavior (R + T = 1).
 
-Figure 2 presents the central result: the wavelength-dependent
-reflectivity R($\lambda$) and transmissivity T($\lambda$). Several key features are
-evident:
+Figure 2 presents the central result: the wavelength-dependent reflectivity R($\lambda$) and transmissivity T($\lambda$). Several key features are evident:
 
-\paragraph{4.2.1 Photonic Bandgap (Stop
-Band)}\label{photonic-bandgap-stop-band}
+\paragraph{4.2.1 Photonic Bandgap (Stop Band)}\label{photonic-bandgap-stop-band}
 
-In the range 400--500 nm, the structure exhibits extraordinarily high
-reflectivity (R \textgreater{} 0.999), with the peak occurring at $\lambda$ $\approx$
-451 nm. This ``stop band'' represents the photonic bandgap where light
-propagation is forbidden. The numerical results show:
+In the range 400--500 nm, the structure exhibits extraordinarily high reflectivity (R \textgreater{} 0.999), with the peak occurring at $\lambda$ $\approx$ 451 nm. This ``stop band'' represents the photonic bandgap where light propagation is forbidden. The numerical results show:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Maximum reflectivity:} R\_max = 0.9999999999717146 $\approx$ 1.0
-  (99.99999999717\%)
+  \textbf{Maximum reflectivity:} R\_max = 0.9999999999717146 $\approx$ 1.0 (99.99999999717\%)
 \item
-  \textbf{Stop band width (FWHM):} $\Delta$\lambda$ $\approx$ 50 nm
+  \textbf{Stop band width (FWHM):} $\Delta\lambda \approx 50$ nm
 \item
-  \textbf{Spectral selectivity:} $\Delta$\lambda$/$\lambda_B$ $\approx$ 11\%
+  \textbf{Spectral selectivity:} $\Delta\lambda/\lambda_B \approx 11\%$
 \end{itemize}
 
-The near-unity reflectivity with 30 periods demonstrates the efficiency
-of coherent interference in periodic structures.
+The near-unity reflectivity with 30 periods demonstrates the efficiency of coherent interference in periodic structures.
 
 \paragraph{4.2.2 Band Edge}\label{band-edge}
 
-At $\lambda$ $\approx$ 500 nm, the reflectivity drops sharply from R $\approx$ 1 to R $\approx$ 0.2 over
-\textasciitilde20 nm. This abrupt transition defines the band edge,
-beyond which light can propagate through the structure. The steepness of
-this edge is determined by the refractive index contrast and number of
-periods.
+At $\lambda$ $\approx$ 500 nm, the reflectivity drops sharply from R $\approx$ 1 to R $\approx$ 0.2 over \textasciitilde20 nm. This abrupt transition defines the band edge, beyond which light can propagate through the structure. The steepness of this edge is determined by the refractive index contrast and number of periods.
 
-\paragraph{4.2.3 Fabry-Pérot
-Oscillations}\label{fabry-puxe9rot-oscillations}
+\paragraph{4.2.3 Fabry-Pérot Oscillations}\label{fabry-puxe9rot-oscillations}
 
-For $\lambda$ \textgreater{} 500 nm, the reflectivity exhibits periodic
-oscillations with gradually decreasing amplitude. These Fabry-Pérot
-resonances arise from multiple reflections between the front and back
-interfaces of the finite stack. The oscillation period decreases with
-wavelength, and the envelope decays as 1/N, where N is the number of
-periods.
+For $\lambda$ \textgreater{} 500 nm, the reflectivity exhibits periodic oscillations with gradually decreasing amplitude. These Fabry-Pérot resonances arise from multiple reflections between the front and back interfaces of the finite stack. The oscillation period decreases with wavelength, and the envelope decays as 1/N, where N is the number of periods.
 
-\paragraph{4.2.4 Complementary
-Transmission}\label{complementary-transmission}
+\paragraph{4.2.4 Complementary Transmission}\label{complementary-transmission}
 
-The transmissivity spectrum (Figure 2, bottom) is perfectly
-complementary to the reflectivity: where R $\approx$ 1, T $\approx$ 0, and vice versa.
-Within the stop band, virtually no light is transmitted (T \textless{}
-$10^{-9}$). Outside the stop band, transmission ranges from 40\% to nearly
-100\%, modulated by the Fabry-Pérot resonances.
+The transmissivity spectrum (Figure 2, bottom) is perfectly complementary to the reflectivity: where R $\approx$ 1, T $\approx$ 0, and vice versa. Within the stop band, virtually no light is transmitted (T \textless{} 10$^{-9}$. Outside the stop band, transmission ranges from 40\% to nearly 100\%, modulated by the Fabry-Pérot resonances.
 
-\subsubsection{4.3 Validation Against Analytical
-Theory}\label{validation-against-analytical-theory}
+\subsubsection{4.3 Validation Against Analytical Theory}\label{validation-against-analytical-theory}
 
 \begin{figure}
 \centering
@@ -509,55 +389,29 @@ Theory}\label{validation-against-analytical-theory}
 \caption{Validation}
 \end{figure}
 
-\textbf{Figure 3:} Validation of numerical simulation against analytical
-Bragg law. Reflectivity plotted versus normalized wavelength $\lambda$/$\lambda_B$. The
-red dashed line marks the first-order Bragg condition ($\lambda$/$\lambda_B = 1), and
-the pink shaded region indicates ±5\% tolerance. TMM results (blue) show
-excellent agreement with theory.
+\textbf{Figure 3:} Validation of numerical simulation against analytical Bragg law. Reflectivity plotted versus normalized wavelength $\lambda/\lambda_B$. The red dashed line marks the first-order Bragg condition ($\lambda/\lambda_B$ = 1), and the pink shaded region indicates ±5\% tolerance. TMM results (blue) show excellent agreement with theory.
 
-Figure 3 presents the validation analysis by plotting reflectivity
-against the normalized wavelength $\lambda$/$\lambda_B$. This dimensionless
-representation allows direct comparison with the universal Bragg
-condition and reveals several important features:
+Figure 3 presents the validation analysis by plotting reflectivity against the normalized wavelength $\lambda/\lambda_B$. This dimensionless representation allows direct comparison with the universal Bragg condition and reveals several important features:
 
 \paragraph{4.3.1 Primary Bragg Peak}\label{primary-bragg-peak}
 
-The dominant reflectivity maximum occurs precisely at $\lambda$/$\lambda_B = 0.9996,
-corresponding to $\lambda$ = 451.02 nm. The extremely close alignment with the
-theoretical prediction ($\lambda$/$\lambda_B = 1.0, marked by the red dashed line)
-validates my numerical implementation. The peak position was refined
-using quadratic interpolation around the maximum, achieving sub-grid
-accuracy of ±0.2 nm despite the 10.2 nm sampling interval.
+The dominant reflectivity maximum occurs precisely at $\lambda/\lambda_B$ = 0.9996, corresponding to $\lambda$ = 451.02 nm. The extremely close alignment with the theoretical prediction ($\lambda/\lambda_B$ = 1.0, marked by the red dashed line) validates my numerical implementation. The peak position was refined using quadratic interpolation around the maximum, achieving sub-grid accuracy of ±0.2 nm despite the 10.2 nm sampling interval.
 
-\paragraph{4.3.2 Fabry-Pérot Resonances Beyond the Stop
-Band}\label{fabry-puxe9rot-resonances-beyond-the-stop-band}
+\paragraph{4.3.2 Fabry-Pérot Resonances Beyond the Stop Band}\label{fabry-puxe9rot-resonances-beyond-the-stop-band}
 
-Additional reflectivity maxima are visible at $\lambda$/$\lambda_B$ $\approx$ 1.3, 1.6, 1.9,
-etc. These are \textbf{NOT higher-order Bragg peaks} (which would occur
-at $\lambda$/$\lambda_B = 1/m \textless{} 1 for orders m = 2, 3, \ldots). Instead,
-they are \textbf{Fabry-Pérot resonances} arising from the finite
-thickness of the multilayer stack, representing standing wave modes
-within the structure.
+Additional reflectivity maxima are visible at $\lambda/\lambda_B$ $\approx$ 1.3, 1.6, 1.9, etc. These are \textbf{NOT higher-order Bragg peaks} (which would occur at $\lambda/\lambda_B$ = 1/m \textless{} 1 for orders m = 2, 3, \ldots). Instead, they are \textbf{Fabry-Pérot resonances} arising from the finite thickness of the multilayer stack, representing standing wave modes within the structure.
 
-\textbf{True higher-order Bragg diffraction} would occur at: - m=2: $\lambda_2$ =
-$\lambda_B$/2 $\approx$ 225 nm (UV, outside our simulation range) - m=3: $\lambda_3$ = $\lambda_B$/3 $\approx$
-150 nm (deep UV, outside our simulation range)
+\textbf{True higher-order Bragg diffraction} would occur at: - m=2: $\lambda_2 = \lambda_B/2 \approx 225$ nm (UV, outside our simulation range) - m=3: $\lambda_3 = \lambda_B/3 \approx 150$ nm (deep UV, outside our simulation range)
 
-These shorter-wavelength higher-order peaks are not captured in the
-400-900 nm spectral window investigated here.
+These shorter-wavelength higher-order peaks are not captured in the 400-900 nm spectral window investigated here.
 
 \paragraph{4.3.3 Bragg Region}\label{bragg-region}
 
-The pink shaded region (0.95 \textless{} $\lambda$/$\lambda_B$ \textless{} 1.05)
-encompasses wavelengths within 5\% of the Bragg condition. The
-reflectivity remains above 99\% throughout this region, indicating the
-robustness of the photonic bandgap against small wavelength variations.
+The pink shaded region (0.95 \textless{} $\lambda/\lambda_B$ \textless{} 1.05) encompasses wavelengths within 5\% of the Bragg condition. The reflectivity remains above 99\% throughout this region, indicating the robustness of the photonic bandgap against small wavelength variations.
 
-\subsubsection{4.4 Quantitative Validation
-Metrics}\label{quantitative-validation-metrics}
+\subsubsection{4.4 Quantitative Validation Metrics}\label{quantitative-validation-metrics}
 
-\textbf{Table 1:} Comparison of theoretical predictions with TMM
-numerical results.
+\textbf{Table 1:} Comparison of theoretical predictions with TMM numerical results.
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2439}}
@@ -580,22 +434,15 @@ Error
 \endlastfoot
 Bragg wavelength $\lambda_B$ (nm) & 451.20 & 451.02 & 0.18 nm \\
 Relative error in $\lambda_B$ & --- & --- & 0.040\% \\
-Maximum reflectivity R\_max & 1.0 (ideal) & 0.999999999972 &
-$2.8 \times 10^{-11}$ \\
-Stop band width $\Delta$\lambda$ (nm) & \textasciitilde45 (estimated) &
-\textasciitilde50 & \textasciitilde10\% \\
+Maximum reflectivity $R_{\text{max}}$ & 1.0 (ideal) & 0.999999999972 & $2.8 \times 10^{-11}$ \\
+Stop band width $\Delta\lambda$ (nm) & \textasciitilde45 (estimated) & \textasciitilde50 & \textasciitilde10\% \\
 \end{longtable}
 
-The exceptional agreement (0.040\% error in $\lambda_B$) validates both the
-physical model and the numerical implementation. The sub-0.1\% accuracy
-is well within the requirements for practical DBR design.
+The exceptional agreement (0.040\% error in $\lambda_B$) validates both the physical model and the numerical implementation. The sub-0.1\% accuracy is well within the requirements for practical DBR design.
 
-\subsubsection{4.5 Energy Conservation
-Verification}\label{energy-conservation-verification}
+\subsubsection{4.5 Energy Conservation Verification}\label{energy-conservation-verification}
 
-A critical test of numerical accuracy is verification of energy
-conservation. For all wavelength points, energy conservation is
-satisfied to machine precision:
+A critical test of numerical accuracy is verification of energy conservation. For all wavelength points, energy conservation is satisfied to machine precision:
 
 \[R(\lambda) + T(\lambda) = 1 \pm \varepsilon_{\text{machine}}\]
 
@@ -611,39 +458,21 @@ Key findings:
   \textbf{All points satisfy:} $|A| < 10^{-13}$
 \end{itemize}
 
-These values are at the level of machine precision for double-precision
-floating-point arithmetic ($\varepsilon \approx 2.2 \times 10^{-16}$), confirming the numerical
-stability of my TMM implementation. No unphysical absorption or
-numerical artifacts are present.
+These values are at the level of machine precision for double-precision floating-point arithmetic ($\varepsilon \approx 2.2 \times 10^{-16}$), confirming the numerical stability of my TMM implementation. No unphysical absorption or numerical artifacts are present.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{5. Discussion}\label{discussion}
 
-\subsubsection{5.1 Physical
-Interpretation}\label{physical-interpretation}
+\subsubsection{5.1 Physical Interpretation}\label{physical-interpretation}
 
-The exceptional agreement between theory and simulation (0.040\% error)
-confirms that the Transfer Matrix Method correctly captures the physics
-of Bragg diffraction in one-dimensional photonic crystals. The
-near-unity reflectivity (R \textgreater{} 99.99\%) at the Bragg
-wavelength arises from constructive interference of waves reflected from
-the 60 interfaces in the 30-period stack. Each interface contributes a
-small reflection (\textasciitilde4\% for the $n_1/n_2$ contrast), but phase
-coherence causes these reflections to add constructively at $\lambda_B$,
-yielding total reflection.
+The exceptional agreement between theory and simulation (0.040\% error) confirms that the Transfer Matrix Method correctly captures the physics of Bragg diffraction in one-dimensional photonic crystals. The near-unity reflectivity (R \textgreater{} 99.99\%) at the Bragg wavelength arises from constructive interference of waves reflected from the 60 interfaces in the 30-period stack. Each interface contributes a small reflection (\textasciitilde4\% for the $n_1/n_2$ contrast), but phase coherence causes these reflections to add constructively at $\lambda_B$, yielding total reflection.
 
-The photonic bandgap width ($\Delta$\lambda$ $\approx$ 50 nm) is determined primarily by the
-refractive index contrast. Larger $\Delta n$ produces wider bandgaps and steeper
-band edges. The choice of SiO$_2$/TiO$_2$ ($\Delta n$ = 0.84) provides a good balance
-between bandgap width and material compatibility.
+The photonic bandgap width ($\Delta\lambda \approx 50$ nm) is determined primarily by the refractive index contrast. Larger $\Delta n$ produces wider bandgaps and steeper band edges. The choice of SiO$_2$/TiO$_2$ ($\Delta n = 0.84$) provides a good balance between bandgap width and material compatibility.
 
-\subsubsection{5.2 Comparison with Infinite Stack
-Theory}\label{comparison-with-infinite-stack-theory}
+\subsubsection{5.2 Comparison with Infinite Stack Theory}\label{comparison-with-infinite-stack-theory}
 
-For an infinite periodic structure (N $\to$ $\infty$), the Bragg condition predicts
-complete reflection (R = 1) at $\lambda_B$ with zero bandwidth. My finite stack
-exhibits:
+For an infinite periodic structure ($N \to \infty$), the Bragg condition predicts complete reflection (R = 1) at $\lambda_B$ with zero bandwidth. My finite stack exhibits:
 
 \begin{itemize}
 \tightlist
@@ -655,81 +484,53 @@ exhibits:
   Non-zero transmission at band edges
 \end{itemize}
 
-These deviations are characteristic of finite-size effects and diminish
-as N increases. With 30 periods, I am in the regime where the structure
-behaves nearly as an ideal Bragg reflector within the stop band, but
-finite-size effects are visible outside it.
+These deviations are characteristic of finite-size effects and diminish as N increases. With 30 periods, I am in the regime where the structure behaves nearly as an ideal Bragg reflector within the stop band, but finite-size effects are visible outside it.
 
-\subsubsection{5.3 Equal-Thickness vs.~Quarter-Wave
-Design}\label{equal-thickness-vs.-quarter-wave-design}
+\subsubsection{5.3 Equal-Thickness vs.~Quarter-Wave Design}\label{equal-thickness-vs.-quarter-wave-design}
 
-My structure uses \textbf{equal physical thickness} ($d_1 = d_2$ = 60 nm),
-which simplifies fabrication but differs from the optimal
-\textbf{quarter-wave stack} design.
+My structure uses \textbf{equal physical thickness} ($d_1 = d_2$ = 60 nm), which simplifies fabrication but differs from the optimal \textbf{quarter-wave stack} design.
 
-\textbf{Quarter-wave stack} (optimal for maximum reflectivity): -
-Condition: $n_1 d_1 = n_2 d_2$ = $\lambda_B/4$ - Layer 1: $d_1 = \lambda_B/(4n_1)$ =
-451.2/(4×1.46) $\approx$ 77.2 nm - Layer 2: $d_2 = \lambda_B/(4n_2)$ = 451.2/(4×2.30) $\approx$
-49.0 nm - Effective index: n\_eff = $\sqrt{n_1 \cdot n_2}$ $\approx$ 1.832 - Bragg wavelength:
-$\lambda_B = 2 \cdot n_{\text{eff}} \cdot (d_1 + d_2)/2$ $\approx$ 463 nm
+\textbf{Quarter-wave stack} (optimal for maximum reflectivity): - Condition: $n_1 d_1 = n_2 d_2 = \lambda_B/4$ - Layer 1: $d_1 = \lambda_B/(4n_1) = 451.2/(4\times1.46) \approx 77.2$ nm - Layer 2: $d_2 = \lambda_B/(4n_2) = 451.2/(4\times2.30) \approx 49.0$ nm - Effective index: $n_{\text{eff}} = \sqrt{n_1 \cdot n_2} \approx 1.832$ - Bragg wavelength: $\lambda_B = 2 \cdot n_{\text{eff}} \cdot (d_1+d_2)/2 \approx 463$ nm
 
-\textbf{Equal-thickness design} (my approach): - Condition: $d_1 = d_2$ = 60
-nm - Effective index: n\_eff = ($n_1 + n_2$)/2 = 1.88 - Bragg wavelength: $\lambda_B =  $2 \cdot n_{\text{eff}} \cdot d_1 = 451.2$ nm - Advantage: Simpler fabrication (single
-thickness control) - Trade-off: \textasciitilde5-10\% lower peak
-reflectivity than optimal quarter-wave design at longer wavelengths
+\textbf{Equal-thickness design} (my approach): - Condition: $d_1 = d_2 = 60$ nm - Effective index: $n_{\text{eff}} = (n_1+n_2)/2 = 1.88$ - Bragg wavelength: $\lambda_B = 2 \cdot n_{\text{eff}} \cdot d_1 = 451.2$ nm - Advantage: Simpler fabrication (single thickness control) - Trade-off: \textasciitilde5-10\% lower peak reflectivity than optimal quarter-wave design at longer wavelengths
 
-The two designs target different wavelengths for the same total period
-and use different effective index definitions. The equal-thickness
-approach prioritizes manufacturing simplicity, while the quarter-wave
-approach maximizes reflectivity for a given number of periods.
+The two designs target different wavelengths for the same total period and use different effective index definitions. The equal-thickness approach prioritizes manufacturing simplicity, while the quarter-wave approach maximizes reflectivity for a given number of periods.
 
-\subsubsection{5.4 Practical Implications for DBR
-Design}\label{practical-implications-for-dbr-design}
+\subsubsection{5.4 Practical Implications for DBR Design}\label{practical-implications-for-dbr-design}
 
-The validated simulation framework enables optimization of DBR
-structures for specific applications:
+The validated simulation framework enables optimization of DBR structures for specific applications:
 
 \textbf{VCSEL Mirrors}
 
-For 850 nm VCSELs (common in optical data links), my results suggest: -
-Required period: d $\approx$ 226 nm - 25--30 periods sufficient for R
-\textgreater{} 99.9\% - AlGaAs/GaAs material system ($\Delta n$ $\approx$ 0.5) requires
-\textasciitilde40 periods for equivalent reflectivity
+For 850 nm VCSELs (common in optical data links), my results suggest: - Required period: d $\approx$ 226 nm - 25--30 periods sufficient for R \textgreater{} 99.9\% - AlGaAs/GaAs material system ($\Delta$n $\approx$ 0.5) requires \textasciitilde40 periods for equivalent reflectivity
 
 \textbf{Optical Filters}
 
-For narrow-band filtering: - Increase N to sharpen band edges (steepness
-$\propto$ N) - Reduce $\Delta n$ for narrower stop bands ($\Delta$\lambda$/$\lambda_B$ $\propto$ $\Delta n$) - Graded
-interfaces reduce sidelobes
+For narrow-band filtering: - Increase N to sharpen band edges (steepness $\propto$ N) - Reduce $\Delta n$ for narrower stop bands ($\Delta\lambda/\lambda_B \propto \Delta n$) - Graded interfaces reduce sidelobes
 
 \textbf{Broadband Reflectors}
 
-For wide stop bands: - Maximize $\Delta n$ (e.g., Si/SiO$_2$: $\Delta n$ $\approx$ 2.6) - Use
-chirped structures (varying d along stack) - Stack multiple Bragg
-reflectors at different $\lambda_B$
+For wide stop bands: - Maximize $\Delta n$ (e.g., Si/SiO$_2$: $\Delta n \approx 2.6$) - Use chirped structures (varying d along stack) - Stack multiple Bragg reflectors at different $\lambda_B$
 
-\subsubsection{5.5 Numerical Accuracy and
-Limitations}\label{numerical-accuracy-and-limitations}
+\subsubsection{5.5 Numerical Accuracy and Limitations}\label{numerical-accuracy-and-limitations}
 
-My implementation achieves 0.040\% error in $\lambda_B$ determination, limited
-primarily by:
+My implementation achieves 0.040\% error in $\lambda_B$ determination, limited primarily by:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{Wavelength sampling:} $\Delta$\lambda$ = 10.2 nm discrete grid
+  \textbf{Wavelength sampling:} $\Delta\lambda = 10.2$ nm discrete grid
 
   \begin{itemize}
   \tightlist
   \item
     Mitigated by quadratic interpolation
   \item
-    Could be reduced to \textless0.01\% with $\Delta$\lambda$ = 1 nm
+    Could be reduced to \textless0.01\% with $\Delta\lambda = 1$ nm
   \end{itemize}
 \item
-  \textbf{Effective index approximation:} n\_eff = ($n_1 + n_2$)/2 for
-  equal-thickness design
+  \textbf{Effective index approximation:} $n_{\text{eff}} = (n_1+n_2)/2$ for equal-thickness design
 
   \begin{itemize}
   \tightlist
@@ -739,17 +540,17 @@ primarily by:
     Different approximation needed for quarter-wave stacks
   \end{itemize}
 \item
-  \textbf{Normal incidence assumption:} $\theta$ = 0°
+  \textbf{Normal incidence assumption:} $\theta = 0°$
 
   \begin{itemize}
   \tightlist
   \item
-    Angular dependence: $\lambda_B$($\theta$) = $\lambda_B$(0)$\sqrt{1 - sin$^2$\theta$/n ^2 \_eff}$
+    Angular dependence: $\lambda_B(\theta) = \lambda_B(0)\sqrt{1 - \sin^2\theta/n_{\text{eff}}^2}$
   \item
     Extension to oblique incidence: straightforward
   \end{itemize}
 \item
-  \textbf{Material dispersion neglected:} constant $n_1$, $n_2$
+  \textbf{Material dispersion neglected:} constant n$_1$, n$_2$
 
   \begin{itemize}
   \tightlist
@@ -760,93 +561,57 @@ primarily by:
   \end{itemize}
 \end{enumerate}
 
-The energy conservation verification (\textbar A\textbar{} \textless{}
-$10^{-14}$) confirms that numerical round-off errors are negligible. Matrix
-exponentiation ({[}M\_cell{]}\^{}N) is numerically stable for N $\leq$ 100,
-beyond which alternative methods (e.g., Bloch mode decomposition) may be
-preferable.
+The energy conservation verification ($|A| < 10^{-14}$) confirms that numerical round-off errors are negligible. Matrix exponentiation ($[M_{\text{cell}}]^N$) is numerically stable for $N \leq 100$, beyond which alternative methods (e.g., Bloch mode decomposition) may be preferable.
 
-\subsubsection{5.6 Extensions and Future
-Work}\label{extensions-and-future-work}
+\subsubsection{5.6 Extensions and Future Work}\label{extensions-and-future-work}
 
 Potential extensions of this work include:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Oblique incidence:} Angle-dependent reflectivity R($\lambda$, $\theta$) and
-  polarization-dependent effects (TE vs.~TM)
+  \textbf{Oblique incidence:} Angle-dependent reflectivity R($\lambda, \theta$) and polarization-dependent effects (TE vs.~TM)
 \item
-  \textbf{Absorption:} Complex refractive indices n = n' + in'\,' for
-  lossy materials
+  \textbf{Absorption:} Complex refractive indices n = n' + in'\,' for lossy materials
 \item
-  \textbf{Defect modes:} Engineered defects create transmission
-  resonances within the bandgap
+  \textbf{Defect modes:} Engineered defects create transmission resonances within the bandgap
 \item
-  \textbf{Nonlinear effects:} Intensity-dependent n for optical
-  switching applications
+  \textbf{Nonlinear effects:} Intensity-dependent n for optical switching applications
 \item
-  \textbf{Chirped structures:} Spatially varying d(z) for broadband
-  response
+  \textbf{Chirped structures:} Spatially varying d(z) for broadband response
 \item
-  \textbf{Two-dimensional photonic crystals:} Lateral periodicity for
-  full photonic bandgaps
+  \textbf{Two-dimensional photonic crystals:} Lateral periodicity for full photonic bandgaps
 \item
-  \textbf{Thermal tuning:} Temperature-dependent n(T) for tunable
-  filters
+  \textbf{Thermal tuning:} Temperature-dependent n(T) for tunable filters
 \end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{6. Conclusions}\label{conclusions}
 
-I have presented a comprehensive numerical study of Bragg diffraction in
-one-dimensional photonic crystals using the Transfer Matrix Method. The
-key findings are:
+I have presented a comprehensive numerical study of Bragg diffraction in one-dimensional photonic crystals using the Transfer Matrix Method. The key findings are:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  \textbf{Excellent validation:} The numerical simulation reproduces the
-  analytical Bragg wavelength for equal-thickness designs with 0.040\%
-  error, demonstrating the accuracy of the TMM implementation.
+  \textbf{Excellent validation:} The numerical simulation reproduces the analytical Bragg wavelength for equal-thickness designs with 0.040\% error, demonstrating the accuracy of the TMM implementation.
 \item
-  \textbf{Energy conservation:} All numerical results satisfy R + T = 1
-  to within $10^{-14}$, confirming the physical consistency and numerical
-  stability of the algorithm.
+  \textbf{Energy conservation:} All numerical results satisfy R + T = 1 to within $10^{-14}$, confirming the physical consistency and numerical stability of the algorithm.
 \item
-  \textbf{Photonic bandgap characterization:} The SiO$_2$/TiO$_2$ stack with N
-  = 30 periods achieves 99.99999999717\% reflectivity at $\lambda_B = 451.02
-  nm, with a stop band width of approximately 50 nm.
+  \textbf{Photonic bandgap characterization:} The SiO$_2$/TiO$_2$ stack with N = 30 periods achieves 99.99999999717\% reflectivity at $\lambda_B = 451.02$ nm, with a stop band width of approximately 50 nm.
 \item
-  \textbf{Finite-size effects:} The simulation correctly captures
-  Fabry-Pérot oscillations outside the stop band, validating the
-  method's ability to describe complex interference phenomena in finite
-  structures.
+  \textbf{Finite-size effects:} The simulation correctly captures Fabry-Pérot oscillations outside the stop band, validating the method's ability to describe complex interference phenomena in finite structures.
 \item
-  \textbf{Design framework:} The distinction between equal-thickness and
-  quarter-wave stack designs is clarified, providing guidance for
-  application-specific optimization.
+  \textbf{Design framework:} The distinction between equal-thickness and quarter-wave stack designs is clarified, providing guidance for application-specific optimization.
 \item
-  \textbf{Sub-grid accuracy:} Quadratic interpolation enables
-  determination of the Bragg wavelength to 0.2 nm precision despite 10
-  nm spectral sampling.
+  \textbf{Sub-grid accuracy:} Quadratic interpolation enables determination of the Bragg wavelength to 0.2 nm precision despite 10 nm spectral sampling.
 \item
-  \textbf{Practical applicability:} The validated framework provides a
-  reliable tool for designing DBRs for VCSELs, optical filters, and
-  other photonic devices.
+  \textbf{Practical applicability:} The validated framework provides a reliable tool for designing DBRs for VCSELs, optical filters, and other photonic devices.
 \end{enumerate}
 
-This work demonstrates that the Transfer Matrix Method, when carefully
-implemented with proper boundary conditions and flux normalization,
-provides an exact and efficient approach for simulating wave propagation
-in stratified media. The complete agreement with analytical theory,
-combined with rigorous energy conservation, establishes this as a
-trustworthy computational framework for photonic crystal design and
-analysis.
+This work demonstrates that the Transfer Matrix Method, when carefully implemented with proper boundary conditions and flux normalization, provides an exact and efficient approach for simulating wave propagation in stratified media. The complete agreement with analytical theory, combined with rigorous energy conservation, establishes this as a trustworthy computational framework for photonic crystal design and analysis.
 
-The methodology and open-source implementation provided here enable
-researchers and engineers to:
+The methodology and open-source implementation provided here enable researchers and engineers to:
 
 \begin{itemize}
 \tightlist
@@ -860,50 +625,35 @@ researchers and engineers to:
   Understand the interplay between structure and optical response
 \end{itemize}
 
-Future applications of this framework to more complex geometries,
-oblique incidence, and nonlinear effects will further extend its utility
-in the rapidly advancing field of photonics.
+Future applications of this framework to more complex geometries, oblique incidence, and nonlinear effects will further extend its utility in the rapidly advancing field of photonics.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{Acknowledgments}\label{acknowledgments}
 
-The author thanks the open-source scientific Python community for
-providing the numerical tools (NumPy, Matplotlib) that enabled this
-work. This research was conducted independently without external
-funding.
+The author thanks the open-source scientific Python community for providing the numerical tools (NumPy, Matplotlib) that enabled this work. This research was conducted independently without external funding.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \subsection{References}\label{references}
 
-{[}1{]} Yeh, P. (1988). \emph{Optical Waves in Layered Media}. John
-Wiley \& Sons, New York.
+{[}1{]} Yeh, P. (1988). \emph{Optical Waves in Layered Media}. John Wiley \& Sons, New York.
 
-{[}2{]} Joannopoulos, J. D., Johnson, S. G., Winn, J. N., \& Meade, R.
-D. (2008). \emph{Photonic Crystals: Molding the Flow of Light} (2nd
-ed.). Princeton University Press.
+{[}2{]} Joannopoulos, J. D., Johnson, S. G., Winn, J. N., \& Meade, R. D. (2008). \emph{Photonic Crystals: Molding the Flow of Light} (2nd ed.). Princeton University Press.
 
-{[}3{]} Coldren, L. A., Corzine, S. W., \& Mashanovitch, M. L. (2012).
-\emph{Diode Lasers and Photonic Integrated Circuits} (2nd ed.). John
-Wiley \& Sons.
+{[}3{]} Coldren, L. A., Corzine, S. W., \& Mashanovitch, M. L. (2012). \emph{Diode Lasers and Photonic Integrated Circuits} (2nd ed.). John Wiley \& Sons.
 
-{[}4{]} Macleod, H. A. (2010). \emph{Thin-Film Optical Filters} (4th
-ed.). CRC Press.
+{[}4{]} Macleod, H. A. (2010). \emph{Thin-Film Optical Filters} (4th ed.). CRC Press.
 
-{[}5{]} Born, M., \& Wolf, E. (1999). \emph{Principles of Optics} (7th
-ed.). Cambridge University Press.
+{[}5{]} Born, M., \& Wolf, E. (1999). \emph{Principles of Optics} (7th ed.). Cambridge University Press.
 
-{[}6{]} Saleh, B. E. A., \& Teich, M. C. (2007). \emph{Fundamentals of
-Photonics} (2nd ed.). John Wiley \& Sons.
+{[}6{]} Saleh, B. E. A., \& Teich, M. C. (2007). \emph{Fundamentals of Photonics} (2nd ed.). John Wiley \& Sons.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Appendix A: Computational
-Details}\label{appendix-a-computational-details}
+\subsection{Appendix A: Computational Details}\label{appendix-a-computational-details}
 
-\subsubsection{A.1 Software
-Implementation}\label{a.1-software-implementation}
+\subsubsection{A.1 Software Implementation}\label{a.1-software-implementation}
 
 The simulation was implemented in Python 3.7+ using:
 
@@ -923,43 +673,41 @@ The complete source code is available at: {[}GitHub repository URL{]}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\ControlFlowTok{for}\NormalTok{ each wavelength $\lambda$ }\KeywordTok{in}\NormalTok{ [$\lambda_{\text{min}}$, $\lambda_{\text{max}}$]:}
+\ControlFlowTok{for}\NormalTok{ each wavelength lambda }\KeywordTok{in}\NormalTok{ [lambda\_min, lambda\_max]:}
     \CommentTok{\# Compute phase shifts}
-\NormalTok{ $\phi_1$ }\OperatorTok{=} \DecValTok{2}\ErrorTok{$\pi$}\NormalTok{$\cdot$n_1$\cdot$d_1$}\OperatorTok{/}\NormalTok{$\lambda$}
-\NormalTok{ $\phi_2$ }\OperatorTok{=} \DecValTok{2}\ErrorTok{$\pi$}\NormalTok{$\cdot$n_2$\cdot$d_2$}\OperatorTok{/}\NormalTok{$\lambda$}
+\NormalTok{    phi\_1 = 2*pi*n\_1*d\_1/lambda}
+\NormalTok{    phi\_2 = 2*pi*n\_2*d\_2/lambda}
     
     \CommentTok{\# Construct matrices}
-\NormalTok{    $I_{12}$ }\OperatorTok{=}\NormalTok{ interface\_matrix($n_1$, $n_2$)}
-\NormalTok{    $I_{21}$ }\OperatorTok{=}\NormalTok{ interface\_matrix($n_2$, $n_1$)}
-\NormalTok{    $P_1$ }\OperatorTok{=}\NormalTok{ propagation\_matrix($\phi_1$)}
-\NormalTok{    $P_2$ }\OperatorTok{=}\NormalTok{ propagation\_matrix($\phi_2$)}
+\NormalTok{    I\_12 = interface\_matrix(n\_1, n\_2)}
+\NormalTok{    I\_21 = interface\_matrix(n\_2, n\_1)}
+\NormalTok{    P\_1 = propagation\_matrix(phi\_1)}
+\NormalTok{    P\_2 = propagation\_matrix(phi\_2)}
     
     \CommentTok{\# Unit cell}
-\NormalTok{    M\_cell }\OperatorTok{=}\NormalTok{ $P_1$ $\cdot$ $I_{12}$ $\cdot$ $P_2$ $\cdot$ $I_{21}$}
+\NormalTok{    M\_cell = P\_1 * I\_12 * P\_2 * I\_21}
     
     \CommentTok{\# Total stack}
-\NormalTok{    M\_stack }\OperatorTok{=}\NormalTok{ [M\_cell]}\OperatorTok{\^{}}\NormalTok{N}
-\NormalTok{    M\_total }\OperatorTok{=}\NormalTok{ I\_in$\to$}\DecValTok{1}\NormalTok{ $\cdot$ M\_stack $\cdot$ I\_N$\to$out}
+\NormalTok{    M\_stack = [M\_cell]\^{}N}
+\NormalTok{    M\_total = I\_in\_to\_1 * M\_stack * I\_N\_to\_out}
     
     \CommentTok{\# Reflection and transmission}
-\NormalTok{    r }\OperatorTok{=}\NormalTok{ M\_total[}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{] }\OperatorTok{/}\NormalTok{ M\_total[}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{]}
-\NormalTok{    t }\OperatorTok{=} \DecValTok{1} \OperatorTok{/}\NormalTok{ M\_total[}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{]}
-\NormalTok{    R[$\lambda$] }\OperatorTok{=} \OperatorTok{|}\NormalTok{r}\OperatorTok{|}\NormalTok{$^2$}
-\NormalTok{    T[$\lambda$] }\OperatorTok{=}\NormalTok{ (n\_out}\OperatorTok{/}\NormalTok{n\_in)$\cdot$}\OperatorTok{|}\NormalTok{t}\OperatorTok{|}\NormalTok{$^2$}
+\NormalTok{    r = M\_total[1,0] / M\_total[0,0]}
+\NormalTok{    t = 1 / M\_total[0,0]}
+\NormalTok{    R[lambda] = |r|\^{}2}
+\NormalTok{    T[lambda] = (n\_out/n\_in)*|t|\^{}2}
     
     \CommentTok{\# Energy check}
-\NormalTok{    A[$\lambda$] }\OperatorTok{=} \DecValTok{1} \OperatorTok{{-}}\NormalTok{ (R[$\lambda$] }\OperatorTok{+}\NormalTok{ T[$\lambda$])}
+\NormalTok{    A[lambda] = 1 - (R[lambda] + T[lambda])}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{A.3 Computational
-Performance}\label{a.3-computational-performance}
+\subsubsection{A.3 Computational Performance}\label{a.3-computational-performance}
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Single wavelength point:} \textasciitilde0.5 ms (Intel Core
-  i7, 3.6 GHz)
+  \textbf{Single wavelength point:} \textasciitilde0.5 ms (Intel Core i7, 3.6 GHz)
 \item
   \textbf{Full 50-point scan:} \textasciitilde25 ms
 \item
@@ -968,13 +716,11 @@ Performance}\label{a.3-computational-performance}
   \textbf{Matrix exponentiation:} O(log N) using repeated squaring
 \end{itemize}
 
-The algorithm scales efficiently: doubling N increases computation time
-by \textasciitilde10\%, doubling N\_$\lambda$ doubles computation time linearly.
+The algorithm scales efficiently: doubling N increases computation time by \textasciitilde10\%, doubling N\_$\lambda$ doubles computation time linearly.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Appendix B: Data
-Availability}\label{appendix-b-data-availability}
+\subsection{Appendix B: Data Availability}\label{appendix-b-data-availability}
 
 All simulation data, including:
 
@@ -990,9 +736,7 @@ All simulation data, including:
   Complete simulation summary (TXT format)
 \end{itemize}
 
-are archived with DOI:
-\href{https://doi.org/10.5281/zenodo.17358243}{Zenodo DOI} and available
-at the associated GitHub repository.
+are archived with DOI: \href{https://doi.org/10.5281/zenodo.17358243}{Zenodo DOI} and available at the associated GitHub repository.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -1000,16 +744,12 @@ at the associated GitHub repository.
 \textbf{Word Count:} \textasciitilde5,200\\
 \textbf{Figures:} 3\\
 \textbf{Tables:} 1\\
-\textbf{Code Availability:}
-\href{https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation}{Bragg\_Diffraction\_1D\_Simulation}\\
-\textbf{Data Availability:}
-\href{https://doi.org/10.5281/zenodo.17358243}{Zenodo DOI}
+\textbf{Code Availability:} \href{https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation}{Bragg\_Diffraction\_1D\_Simulation}\\
+\textbf{Data Availability:} \href{https://doi.org/10.5281/zenodo.17358243}{Zenodo DOI}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\emph{Correspondence:} Stefan Len, tqe.simulation@gmail.com,
-\href{https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation}{GitHub:
-@SteviLen420}
+\emph{Correspondence:} Stefan Len, tqe.simulation@gmail.com, \href{https://github.com/SteviLen420/Bragg_Diffraction_1D_Simulation}{GitHub: @SteviLen420}
 
 \emph{Date:} October 15, 2025
 
