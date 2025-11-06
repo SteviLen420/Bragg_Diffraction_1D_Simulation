@@ -1,113 +1,57 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-\documentclass[
-]{article}
-\usepackage{xcolor}
-\usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\usepackage{iftex}
-\ifPDFTeX
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-  \usepackage{unicode-math} % this also loads fontspec
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
+\documentclass{article}
+
+% Standard arXiv-compatible packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
 \usepackage{lmodern}
-\ifPDFTeX\else
-  % xetex/luatex font selection
-\fi
-% Use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\newenvironment{Shaded}{}{}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
-\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
-\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
-\usepackage{longtable,booktabs,array}
-\usepackage{calc} % for calculating minipage widths
-% Correct order of tables after \paragraph or \subparagraph
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{hyperref}
 \usepackage{etoolbox}
+
+% Remove section numbering
+\setcounter{secnumdepth}{-\maxdimen}
+
+% Paragraph spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+% Fix longtable after paragraph
 \makeatletter
 \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
 \makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+
+% Allow footnotes in longtable
+\usepackage{footnote}
 \makesavenoteenv{longtable}
-\usepackage{graphicx}
-\makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
-  \sbox\pandoc@box{#1}%
-  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
-  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
-  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
-  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
-  \else\usebox{\pandoc@box}%
-  \fi%
-}
-% Set default figure placement to htbp
-\def\fps@figure{htbp}
-\makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+% Prevent overfull lines
+\setlength{\emergencystretch}{3em}
+
+% Tight list spacing
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\usepackage{bookmark}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same}
+
+% Verbatim environment for code
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+\newenvironment{Shaded}{}{}
+
+% Hyperref setup
 \hypersetup{
   hidelinks,
-  pdfcreator={LaTeX via pandoc}}
+  colorlinks=false,
+  pdfborder={0 0 0}}
+
+% Figure placement
+\def\fps@figure{htbp}
 
 \author{}
 \date{}
@@ -138,7 +82,7 @@ physical layer thicknesses of 60 nm, and total period d = 120 nm, I
 achieve excellent agreement between numerical and analytical results,
 with a relative error of 0.040\% in the Bragg wavelength determination.
 Energy conservation is verified to machine precision
-(\textbar A\textbar{} \textless{} 10⁻¹⁴), confirming the numerical
+($|A| < 10^{-14}$), confirming the numerical
 stability of my implementation. The computed reflectivity spectrum
 exhibits the characteristic photonic bandgap with R \textgreater{}
 99.99\% at the Bragg wavelength λ\_B = 451.02 nm, along with Fabry-Pérot
@@ -325,7 +269,7 @@ absorption. I define the absorption/error parameter:
 \[A = 1 - (R + T)\]
 
 For a numerically stable implementation, I require \textbar A\textbar{}
-\textless{} 10⁻¹⁰ across the entire spectral range.
+$< 10^{-10}$ across the entire spectral range.
 
 \subsubsection{2.4 Numerical
 Implementation}\label{numerical-implementation}
@@ -465,7 +409,7 @@ Profile}\label{refractive-index-profile}
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Refractive Index Profile}]{figs/bragg_stack_structure.png}}
+\includegraphics[width=0.8\textwidth,keepaspectratio]{figs/bragg_stack_structure.png}
 \caption{Refractive Index Profile}
 \end{figure}
 
@@ -485,7 +429,7 @@ Spectra}\label{reflectivity-and-transmissivity-spectra}
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Reflectivity and Transmissivity}]{figs/reflectivity_spectrum.png}}
+\includegraphics[width=0.8\textwidth,keepaspectratio]{figs/reflectivity_spectrum.png}
 \caption{Reflectivity and Transmissivity}
 \end{figure}
 
@@ -545,7 +489,7 @@ Transmission}\label{complementary-transmission}
 The transmissivity spectrum (Figure 2, bottom) is perfectly
 complementary to the reflectivity: where R ≈ 1, T ≈ 0, and vice versa.
 Within the stop band, virtually no light is transmitted (T \textless{}
-10⁻⁹). Outside the stop band, transmission ranges from 40\% to nearly
+$10^{-9}$). Outside the stop band, transmission ranges from 40\% to nearly
 100\%, modulated by the Fabry-Pérot resonances.
 
 \subsubsection{4.3 Validation Against Analytical
@@ -553,7 +497,7 @@ Theory}\label{validation-against-analytical-theory}
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Validation}]{figs/validation_plot.png}}
+\includegraphics[width=0.8\textwidth,keepaspectratio]{figs/validation_plot.png}
 \caption{Validation}
 \end{figure}
 
@@ -629,7 +573,7 @@ Error
 Bragg wavelength λ\_B (nm) & 451.20 & 451.02 & 0.18 nm \\
 Relative error in λ\_B & --- & --- & 0.040\% \\
 Maximum reflectivity R\_max & 1.0 (ideal) & 0.999999999972 &
-2.8×10⁻¹¹ \\
+$2.8 \times 10^{-11}$ \\
 Stop band width Δλ (nm) & \textasciitilde45 (estimated) &
 \textasciitilde50 & \textasciitilde10\% \\
 \end{longtable}
@@ -652,15 +596,15 @@ Key findings:
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Maximum deviation:} \textbar A\textbar\_max = 2.58 × 10⁻¹⁴
+  \textbf{Maximum deviation:} $|A|_{\text{max}} = 2.58 \times 10^{-14}$
 \item
-  \textbf{Mean deviation:} ⟨\textbar A\textbar⟩ = 5.2 × 10⁻¹⁵
+  \textbf{Mean deviation:} $\langle |A| \rangle = 5.2 \times 10^{-15}$
 \item
-  \textbf{All points satisfy:} \textbar A\textbar{} \textless{} 10⁻¹³
+  \textbf{All points satisfy:} $|A| < 10^{-13}$
 \end{itemize}
 
 These values are at the level of machine precision for double-precision
-floating-point arithmetic (ε ≈ 2.2 × 10⁻¹⁶), confirming the numerical
+floating-point arithmetic ($\varepsilon \approx 2.2 \times 10^{-16}$), confirming the numerical
 stability of my TMM implementation. No unphysical absorption or
 numerical artifacts are present.
 
@@ -810,7 +754,7 @@ primarily by:
 \end{enumerate}
 
 The energy conservation verification (\textbar A\textbar{} \textless{}
-10⁻¹⁴) confirms that numerical round-off errors are negligible. Matrix
+$10^{-14}$) confirms that numerical round-off errors are negligible. Matrix
 exponentiation ({[}M\_cell{]}\^{}N) is numerically stable for N ≤ 100,
 beyond which alternative methods (e.g., Bloch mode decomposition) may be
 preferable.
@@ -861,7 +805,7 @@ key findings are:
   error, demonstrating the accuracy of the TMM implementation.
 \item
   \textbf{Energy conservation:} All numerical results satisfy R + T = 1
-  to within 10⁻¹⁴, confirming the physical consistency and numerical
+  to within $10^{-14}$, confirming the physical consistency and numerical
   stability of the algorithm.
 \item
   \textbf{Photonic bandgap characterization:} The SiO₂/TiO₂ stack with N
